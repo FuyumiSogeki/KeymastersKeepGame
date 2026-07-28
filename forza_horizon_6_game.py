@@ -5,7 +5,7 @@ from typing import List
 
 from dataclasses import dataclass
 
-from Options import OptionSet, Toggle
+from Options import OptionSet, Toggle, DefaultOnToggle
 
 from ..game import Game
 from ..game_objective_template import GameObjectiveTemplate
@@ -2101,23 +2101,23 @@ class ForzaHorizon6Game(Game):
         return range(1, 10)
         
 # Archipelago Options
-class ForzaHorizon6IncludeCarChallenges(Toggle):
+class ForzaHorizon6IncludeCarChallenges(DefaultOnToggle):
     """Indicates whether challenges can require specific cars in Forza Horizon 6"""
     display_name = "Forza Horizon 6 Include Car Challenges"
     
-class ForzaHorizon6IncludeGiftChallenge(Toggle):
+class ForzaHorizon6IncludeGiftChallenge(DefaultOnToggle):
     """Indicates whether challenges can require sending Gifts in Forza Horizon 6"""
     display_name = "Forza Horizon 6 Include Gift Challenge"
     
-class ForzaHorizon6IncludeCruisingChallenges(Toggle):
+class ForzaHorizon6IncludeCruisingChallenges(DefaultOnToggle):
     """Indicates whether challenges can require driving between 2 locations in Forza Horizon 6"""
     display_name = "Forza Horizon 6 Include Cruise Challenges"
     
-class ForzaHorizon6IncludeJobChallenges(Toggle):
+class ForzaHorizon6IncludeJobChallenges(DefaultOnToggle):
     """Indicates whether challenges can require doing Jobs in Forza Horizon 6"""
     display_name = "Forza Horizon 6 Include Job Challenges"
     
-class ForzaHorizon6IncludeMasteryChallenges(Toggle):
+class ForzaHorizon6IncludeMasteryChallenges(DefaultOnToggle):
     """Indicates whether challenges can require completing Mastery Trees in Forza Horizon 6"""
     display_name = "Forza Horizon 6 Include Mastery Challenges"
     
