@@ -14,12 +14,9 @@ from ..enums import KeymastersKeepGamePlatforms
 
 @dataclass
 class ForzaHorizon6ArchipelagoOptions:
-    forza_horizon_6_car_challenge: ForzaHorizon6IncludeCarChallenges
-    forza_horizon_6_gift_challenge: ForzaHorizon6IncludeGiftChallenge
-    forza_horizon_6_job_challenge: ForzaHorizon6IncludeJobChallenges
-    forza_horizon_6_cruise_challenge: ForzaHorizon6IncludeCruisingChallenges
-    forza_horizon_6_mastery_challenge: ForzaHorizon6IncludeMasteryChallenges
     forza_horizon_6_car_set: ForzaHorizon6IncludeCarSet
+    forza_horizon_6_challenge_type: ForzaHorizon6IncludeChallengeType
+    forza_horizon_6_condition_type: ForzaHorizon6IncludeConditionType
     
 class ForzaHorizon6Game(Game):
     name = "Forza Horizon 6"
@@ -68,261 +65,477 @@ class ForzaHorizon6Game(Game):
                     "DIFFICULTY": (self.drivatar_difficulties, 1),
                 },
             ),
+            GameObjectiveTemplate(
+                label="You cannot fast travel to your destinations",
+                data={},
+            ),
         ]
 
     def game_objective_templates(self) -> List[GameObjectiveTemplate]:
-        templates: List[GameObjectiveTemplate] = [
-            GameObjectiveTemplate(
-                label="Finish 1st on TRACK touge",
-                data={
-                    "TRACK": (self.tracks_touge, 1)
-                },
-                is_time_consuming=False,
-                is_difficult=False,
-                weight=1,
-            ),
-            GameObjectiveTemplate(
-                label="Finish PLACEMENT on TRACK with a car from the following brand: BRAND",
-                data={
-                    "PLACEMENT": (self.race_placements, 1),
-                    "TRACK": (self.tracks_including_long, 1),
-                    "BRAND": (self.car_brands, 1),
-                },
-                is_time_consuming=False,
-                is_difficult=False,
-                weight=2,
-            ),
-            GameObjectiveTemplate(
-                label="Finish PLACEMENT on TRACK with a car from the following class: CLASS",
-                data={
-                    "PLACEMENT": (self.race_placements, 1),
-                    "TRACK": (self.tracks_including_long, 1),
-                    "CLASS": (self.car_classes, 1),
-                },
-                is_time_consuming=False,
-                is_difficult=False,
-                weight=2,
-            ),
-            GameObjectiveTemplate(
-                label="Finish PLACEMENT on TRACK with a car from the following type: TYPE",
-                data={
-                    "PLACEMENT": (self.race_placements, 1),
-                    "TRACK": (self.tracks_including_long, 1),
-                    "TYPE": (self.car_types, 1),
-                },
-                is_time_consuming=False,
-                is_difficult=False,
-                weight=2,
-            ),
-            GameObjectiveTemplate(
-                label="Finish PLACEMENT on TRACKS with a car from the following brand: BRAND",
-                data={
-                    "PLACEMENT": (self.race_placements, 1),
-                    "TRACKS": (self.tracks, 3),
-                    "BRAND": (self.car_brands, 1),
-                },
-                is_time_consuming=True,
-                is_difficult=False,
-                weight=2,
-            ),
-            GameObjectiveTemplate(
-                label="Finish PLACEMENT on TRACKS with a car from the following class: CLASS",
-                data={
-                    "PLACEMENT": (self.race_placements, 1),
-                    "TRACKS": (self.tracks, 3),
-                    "CLASS": (self.car_classes, 1),
-                },
-                is_time_consuming=True,
-                is_difficult=False,
-                weight=2,
-            ),
-            GameObjectiveTemplate(
-                label="Finish PLACEMENT on TRACKS with a car from the following type: TYPE",
-                data={
-                    "PLACEMENT": (self.race_placements, 1),
-                    "TRACKS": (self.tracks, 3),
-                    "TYPE": (self.car_types, 1),
-                },
-                is_time_consuming=True,
-                is_difficult=False,
-                weight=2,
-            ),
-            GameObjectiveTemplate(
-                label="Complete LAP laps on TA with a car from the following brand: BRAND",
-                data={
-                    "LAP": (self.time_attack_lap_range, 1),
-                    "TA": (self.time_attack, 1),
-                    "BRAND": (self.car_brands, 1),
-                },
-                is_time_consuming=True,
-                is_difficult=False,
-                weight=1,
-            ),
-            GameObjectiveTemplate(
-                label="Complete LAP laps on TA with a car from the following class: CLASS",
-                data={
-                    "LAP": (self.time_attack_lap_range, 1),
-                    "TA": (self.time_attack, 1),
-                    "CLASS": (self.car_classes, 1),
-                },
-                is_time_consuming=True,
-                is_difficult=False,
-                weight=1,
-            ),
-            GameObjectiveTemplate(
-                label="Complete LAP laps on TA with a car from the following type: TYPE",
-                data={
-                    "LAP": (self.time_attack_lap_range, 1),
-                    "TA": (self.time_attack, 1),
-                    "TYPE": (self.car_types, 1),
-                },
-                is_time_consuming=True,
-                is_difficult=False,
-                weight=1,
-            ),
-            GameObjectiveTemplate(
-                label="Get at least STAR stars on the following PR Stunts: PR_STUNTS",
-                data={
-                    "STAR": (self.star_amount_range, 1),
-                    "PR_STUNTS": (self.pr_stunts, 3),
-                },
-                is_time_consuming=False,
-                is_difficult=False,
-                weight=2,
-            ),
-            GameObjectiveTemplate(
-                label="Get at least STAR stars on the following PR Stunts: PR_STUNTS",
-                data={
-                    "STAR": (self.star_amount_range, 1),
-                    "PR_STUNTS": (self.pr_stunts, 5),
-                },
-                is_time_consuming=True,
-                is_difficult=False,
-                weight=2,
-            ),
-            GameObjectiveTemplate(
-                label="Get at least STAR stars on the following Story Chapter: STORY",
-                data={
-                    "STAR": (self.star_amount_range, 1),
-                    "STORY": (self.stories, 1),
-                },
-                is_time_consuming=False,
-                is_difficult=False,
-                weight=2,
-            ),
-            GameObjectiveTemplate(
-                label="Pull off the following Skills: SKILLS",
-                data={
-                    "SKILLS": (self.skills, 3),
-                },
-                is_time_consuming=False,
-                is_difficult=False,
-                weight=2,
-            ),
-            GameObjectiveTemplate(
-                label="Pull off the following Skills: SKILLS",
-                data={
-                    "SKILLS": (self.skills, 5),
-                },
-                is_time_consuming=False,
-                is_difficult=False,
-                weight=2,
-            ),
-            GameObjectiveTemplate(
-                label="Post a clean time on the Monthly Rival leaderboard",
-                data={},
-                is_time_consuming=False,
-                is_difficult=False,
-                weight=2,
-            ),
-            GameObjectiveTemplate(
-                label="Beat your closest rival on the Monthly Rival leaderboard",
-                data={},
-                is_time_consuming=True,
-                is_difficult=True,
-                weight=1,
-            ),
-            GameObjectiveTemplate(
-                label="Post a clean time on the Rivals leaderboard for TRACK with CLASS car",
-                data={
-                    "TRACK": (self.tracks_including_long, 1),
-                    "CLASS": (self.car_classes_alternate, 1),
-                },
-                is_time_consuming=False,
-                is_difficult=False,
-                weight=2,
-            ),
-            GameObjectiveTemplate(
-                label="Play a round of ONLINE",
-                data={
-                    "ONLINE": (self.online_modes, 1),
-                },
-                is_time_consuming=False,
-                is_difficult=False,
-                weight=2,
-            ),
-            GameObjectiveTemplate(
-                label="Play the EVENTLAB EventLab Blueprint on page PAGE of the TAB tab",
-                data={
-                    "EVENTLAB": (self.eventlab, 1),
-                    "PAGE": (self.eventlab_page_range, 1),
-                    "TAB": (self.eventlab_tabs, 1),
-                },
-                is_time_consuming=False,
-                is_difficult=False,
-                weight=2,
-            ),
-        ]
+        templates: List[GameObjectiveTemplate] = []
         
-        if self.include_car_challenges:
+        if "Single Race" in self.challenge_sets:
+            Empty = True
+
             templates.extend([
                 GameObjectiveTemplate(
-                    label="Finish PLACEMENT on TRACKS with the following car : CAR",
+                    label="Finish 1st on TRACK touge",
                     data={
-                        "PLACEMENT": (self.race_placements, 1),
-                        "TRACKS": (self.tracks, 3),
-                        "CAR": (self.cars, 1),
+                        "TRACK": (self.tracks_touge, 1)
                     },
+                    is_time_consuming=False,
+                    is_difficult=False,
+                    weight=1,
+                ),
+            ])
+
+            if "Brand" in self.condition_sets:
+                Empty = False
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Finish PLACEMENT on TRACK with a car from the following brand: BRAND",
+                        data={
+                            "PLACEMENT": (self.race_placements, 1),
+                            "TRACK": (self.tracks_including_long, 1),
+                            "BRAND": (self.car_brands, 1),
+                        },
+                        is_time_consuming=False,
+                        is_difficult=False,
+                        weight=2,
+                    ),
+                ])
+
+            if "Class" in self.condition_sets:
+                Empty = False
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Finish PLACEMENT on TRACK with a car from the following class: CLASS",
+                        data={
+                            "PLACEMENT": (self.race_placements, 1),
+                            "TRACK": (self.tracks_including_long, 1),
+                            "CLASS": (self.car_classes, 1),
+                        },
+                        is_time_consuming=False,
+                        is_difficult=False,
+                        weight=2,
+                    ),
+                ])
+
+            if "Type" in self.condition_sets:
+                Empty = False
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Finish PLACEMENT on TRACK with a car from the following type: TYPE",
+                        data={
+                            "PLACEMENT": (self.race_placements, 1),
+                            "TRACK": (self.tracks_including_long, 1),
+                            "TYPE": (self.car_types, 1),
+                        },
+                        is_time_consuming=False,
+                        is_difficult=False,
+                        weight=2,
+                    ),
+                ])
+
+            if "Car" in self.condition_sets:
+                Empty = False
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Finish PLACEMENT on TRACKS with the following car: CAR",
+                        data={
+                            "PLACEMENT": (self.race_placements, 1),
+                            "TRACKS": (self.tracks, 3),
+                            "CAR": (self.cars, 1),
+                        },
+                        is_time_consuming=True,
+                        is_difficult=False,
+                        weight=4,
+                    ),
+                ])
+
+            if Empty:
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Finish PLACEMENT on TRACK",
+                        data={
+                            "PLACEMENT": (self.race_placements, 1),
+                            "TRACK": (self.tracks_including_long, 1)
+                        },
+                        is_time_consuming=True,
+                        is_difficult=False,
+                        weight=4,
+                    ),
+                ])
+
+        if "Championship Race" in self.challenge_sets:
+            Empty = True
+            if "Brand" in self.condition_sets:
+                Empty = False
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Finish PLACEMENT on TRACKS with the following brand: BRAND",
+                        data={
+                            "PLACEMENT": (self.race_placements, 1),
+                            "TRACKS": (self.tracks, 3),
+                            "BRAND": (self.car_brands, 1),
+                        },
+                        is_time_consuming=False,
+                        is_difficult=False,
+                        weight=4,
+                    ),
+                ])
+                
+            if "Class" in self.condition_sets:
+                Empty = False
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Finish PLACEMENT on TRACKS with a car from the following class: CLASS",
+                        data={
+                            "PLACEMENT": (self.race_placements, 1),
+                            "TRACKS": (self.tracks, 3),
+                            "CLASS": (self.car_classes, 1),
+                        },
+                        is_time_consuming=True,
+                        is_difficult=False,
+                        weight=2,
+                    ),
+                ])
+
+            if "Type" in self.condition_sets:
+                Empty = False
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Finish PLACEMENT on TRACKS with a car from the following type: TYPE",
+                        data={
+                            "PLACEMENT": (self.race_placements, 1),
+                            "TRACKS": (self.tracks, 3),
+                            "TYPE": (self.car_types, 1),
+                        },
+                        is_time_consuming=True,
+                        is_difficult=False,
+                        weight=2,
+                    ),
+                ])
+
+            if "Car" in self.condition_sets:
+                Empty = False
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Finish PLACEMENT on TRACKS with the following car: CAR",
+                        data={
+                            "PLACEMENT": (self.race_placements, 1),
+                            "TRACKS": (self.tracks, 3),
+                            "CAR": (self.cars, 1),
+                        },
+                        is_time_consuming=True,
+                        is_difficult=False,
+                        weight=4,
+                    ),
+                ])
+
+            if Empty:
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Finish PLACEMENT on TRACKS",
+                        data={
+                            "PLACEMENT": (self.race_placements, 1),
+                            "TRACKS": (self.tracks, 3)
+                        },
+                        is_time_consuming=True,
+                        is_difficult=False,
+                        weight=4,
+                    ),
+                ])
+
+        if "Rival" in self.challenge_sets: 
+            templates.extend([
+                GameObjectiveTemplate(
+                    label="Post a clean time on the Monthly Rival leaderboard",
+                    data={},
+                    is_time_consuming=False,
+                    is_difficult=False,
+                    weight=2,
+                ),
+                GameObjectiveTemplate(
+                    label="Beat your closest rival on the Monthly Rival leaderboard",
+                    data={},
                     is_time_consuming=True,
-                    is_difficult=False,
-                    weight=2,
+                    is_difficult=True,
+                    weight=1,
                 ),
+            ])
+            Empty = True
+                
+            if "Class" in self.condition_sets:
+                Empty = False
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Post a clean time on the Rivals leaderboard for TRACK with CLASS car",
+                        data={
+                            "TRACK": (self.tracks_including_long, 1),
+                            "CLASS": (self.car_classes_alternate, 1),
+                        },
+                        is_time_consuming=False,
+                        is_difficult=False,
+                        weight=2,
+                    ),
+                ])
+
+            if "Car" in self.condition_sets:
+                Empty = False
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Post a clean time on the Rivals leaderboard for TRACK with the following car : CAR",
+                        data={
+                            "TRACK": (self.tracks_including_long, 1),
+                            "CAR": (self.cars, 1),
+                        },
+                        is_time_consuming=False,
+                        is_difficult=False,
+                        weight=3,
+                    ),
+                ])
+
+            if Empty:
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Post a clean time on the Rivals leaderboard for TRACK",
+                        data={
+                            "TRACK": (self.tracks_including_long, 1)
+                        },
+                        is_time_consuming=False,
+                        is_difficult=False,
+                        weight=3,
+                    ),
+                ])
+
+        if "PR Stunt" in self.challenge_sets: 
+            templates.extend([
                 GameObjectiveTemplate(
-                    label="Finish PLACEMENT on TRACK with the following car : CAR",
+                    label="Get at least STAR stars on the following PR Stunts: PR_STUNTS",
                     data={
-                        "PLACEMENT": (self.race_placements, 1),
-                        "TRACK": (self.tracks_including_long, 1),
-                        "CAR": (self.cars, 1),
+                        "STAR": (self.star_amount_range, 1),
+                        "PR_STUNTS": (self.pr_stunts, 3),
                     },
                     is_time_consuming=False,
                     is_difficult=False,
-                    weight=2,
+                    weight=1,
                 ),
                 GameObjectiveTemplate(
-                    label="Post a clean time on the Rivals leaderboard for TRACK with a CAR",
+                    label="Get at least STAR stars on the following PR Stunts: PR_STUNTS",
                     data={
-                        "TRACK": (self.tracks_including_long, 1),
-                        "CAR": (self.cars, 1),
-                    },
-                    is_time_consuming=False,
-                    is_difficult=False,
-                    weight=2,
-                ),
-                GameObjectiveTemplate(
-                    label="Complete LAP laps on TA with the following car: CAR",
-                    data={
-                        "LAP": (self.time_attack_lap_range, 1),
-                        "TA": (self.time_attack, 1),
-                        "CAR": (self.cars, 1),
+                        "STAR": (self.star_amount_range, 1),
+                        "PR_STUNTS": (self.pr_stunts, 5),
                     },
                     is_time_consuming=True,
                     is_difficult=False,
                     weight=1,
-                )]
-            )
-            
-            if self.include_cruise_challenges:
-                templates.append(
+                ),
+            ])
+
+        if "Skill" in self.challenge_sets: 
+            templates.extend([
+                GameObjectiveTemplate(
+                    label="Pull off the following Skills: SKILLS",
+                    data={
+                        "SKILLS": (self.skills, 3),
+                    },
+                    is_time_consuming=False,
+                    is_difficult=False,
+                    weight=1,
+                ),
+                GameObjectiveTemplate(
+                    label="Pull off the following Skills: SKILLS",
+                    data={
+                        "SKILLS": (self.skills, 5),
+                    },
+                    is_time_consuming=False,
+                    is_difficult=False,
+                    weight=1,
+                ),
+            ])
+
+        if "Car Mastery" in self.challenge_sets: 
+            Empty = True
+
+            if "Brand" in self.condition_sets:
+                Empty = False
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Complete the Mastery Tree of a car from the following brand: BRAND",
+                        data={
+                            "BRAND": (self.car_brands, 1),
+                        },
+                        is_time_consuming=True,
+                        is_difficult=True,
+                        weight=1,
+                    ),
+                ])
+                
+            if "Class" in self.condition_sets:
+                Empty = False
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Complete the Mastery Tree of a car from the following class: CLASS",
+                        data={
+                            "CLASS": (self.car_classes, 1),
+                        },
+                        is_time_consuming=True,
+                        is_difficult=True,
+                        weight=1,
+                    ),
+                ])
+
+            if "Type" in self.condition_sets:
+                Empty = False
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Complete the Mastery Tree of a car from the following type: TYPE",
+                        data={
+                            "TYPE": (self.car_types, 1),
+                        },
+                        is_time_consuming=True,
+                        is_difficult=True,
+                        weight=1,
+                    )
+                ])
+
+            if "Car" in self.condition_sets:
+                Empty = False
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Complete the Mastery Tree of the following car: CAR",
+                        data={
+                            "CAR": (self.cars, 1),
+                        },
+                        is_time_consuming=True,
+                        is_difficult=True,
+                        weight=2,
+                    )
+                ])
+
+            if Empty:
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Complete the Mastery Tree",
+                        data={},
+                        is_time_consuming=True,
+                        is_difficult=True,
+                        weight=2,
+                    )
+                ])
+
+        if "Gift" in self.challenge_sets: 
+            templates.extend([
+                GameObjectiveTemplate(
+                    label="Gift a car",
+                    data={},
+                    is_time_consuming=False,
+                    is_difficult=True,
+                    weight=1,
+                )
+            ])
+
+        if "Online Round" in self.challenge_sets: 
+            templates.extend([
+                GameObjectiveTemplate(
+                    label="Play a round of ONLINE",
+                    data={
+                        "ONLINE": (self.online_modes, 1),
+                    },
+                    is_time_consuming=False,
+                    is_difficult=False,
+                    weight=2,
+                ),
+            ])
+
+        if "Cruise" in self.challenge_sets: 
+            Empty = True
+
+            if "Brand" in self.condition_sets:
+                Empty = False
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Drive from LOC1 to LOC2 with a car from the following brand: BRAND",
+                        data={
+                            "LOC1": (self.locations, 1),
+                            "LOC2": (self.locations, 1),
+                            "BRAND": (self.car_brands, 1),
+                        },
+                        is_time_consuming=False,
+                        is_difficult=False,
+                        weight=2,
+                    ),
+                    GameObjectiveTemplate(
+                        label="Drive from LOC1 to LOC2 using ANNA's autodrive with the following brand: BRAND",
+                        data={
+                            "LOC1": (self.locations, 1),
+                            "LOC2": (self.locations, 1),
+                            "BRAND": (self.car_brands, 1),
+                        },
+                        is_time_consuming=False,
+                        is_difficult=False,
+                        weight=2,
+                    ),
+                ])
+                
+            if "Class" in self.condition_sets:
+                Empty = False
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Drive from LOC1 to LOC2 with a car from the following class: CLASS",
+                        data={
+                            "LOC1": (self.locations, 1),
+                            "LOC2": (self.locations, 1),
+                            "CLASS": (self.car_classes, 1),
+                        },
+                        is_time_consuming=False,
+                        is_difficult=False,
+                        weight=2,
+                    ),
+                    GameObjectiveTemplate(
+                        label="Drive from LOC1 to LOC2 using ANNA's autodrive with the following class: CLASS",
+                        data={
+                            "LOC1": (self.locations, 1),
+                            "LOC2": (self.locations, 1),
+                            "CLASS": (self.car_classes, 1),
+                        },
+                        is_time_consuming=False,
+                        is_difficult=False,
+                        weight=2,
+                    ),
+                ])
+
+            if "Type" in self.condition_sets:
+                Empty = False
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Drive from LOC1 to LOC2 with a car from the following type: TYPE",
+                        data={
+                            "LOC1": (self.locations, 1),
+                            "LOC2": (self.locations, 1),
+                            "TYPE": (self.car_types, 1),
+                        },
+                        is_time_consuming=False,
+                        is_difficult=False,
+                        weight=2,
+                    ),
+                    GameObjectiveTemplate(
+                        label="Drive from LOC1 to LOC2 using ANNA's autodrive with the following type: TYPE",
+                        data={
+                            "LOC1": (self.locations, 1),
+                            "LOC2": (self.locations, 1),
+                            "TYPE": (self.car_types, 1),
+                        },
+                        is_time_consuming=False,
+                        is_difficult=False,
+                        weight=2,
+                    ),
+                ])
+
+            if "Car" in self.condition_sets:
+                Empty = False
+                templates.extend([
                     GameObjectiveTemplate(
                         label="Drive from LOC1 to LOC2 with the following car: CAR",
                         data={
@@ -332,61 +545,46 @@ class ForzaHorizon6Game(Game):
                         },
                         is_time_consuming=False,
                         is_difficult=False,
-                        weight=1,
-                    )
-                )
-                
-            if self.include_mastery_challenges:
-                templates.append(
+                        weight=2,
+                    ),
                     GameObjectiveTemplate(
-                        label="Complete the Mastery Tree of the following: CAR",
+                        label="Drive from LOC1 to LOC2 using ANNA's autodrive with the following car: CAR",
                         data={
+                            "LOC1": (self.locations, 1),
+                            "LOC2": (self.locations, 1),
                             "CAR": (self.cars, 1),
                         },
-                        is_time_consuming=True,
-                        is_difficult=True,
-                        weight=1,
-                    )
-                )
-            
-        if self.include_cruise_challenges:
-            templates.extend([
-                GameObjectiveTemplate(
-                    label="Drive from LOC1 to LOC2 with a car from the following type: TYPE",
-                    data={
-                        "LOC1": (self.locations, 1),
-                        "LOC2": (self.locations, 1),
-                        "TYPE": (self.car_types, 1),
-                    },
-                    is_time_consuming=False,
-                    is_difficult=False,
-                    weight=1,
-                ),
-                GameObjectiveTemplate(
-                    label="Drive from LOC1 to LOC2 with a car from the following brand: BRAND",
-                    data={
-                        "LOC1": (self.locations, 1),
-                        "LOC2": (self.locations, 1),
-                        "BRAND": (self.car_brands, 1),
-                    },
-                    is_time_consuming=False,
-                    is_difficult=False,
-                    weight=1,
-                ),
-                GameObjectiveTemplate(
-                    label="Drive from LOC1 to LOC2 with a car from the following class: CLASS",
-                    data={
-                        "LOC1": (self.locations, 1),
-                        "LOC2": (self.locations, 1),
-                        "CLASS": (self.car_classes, 1),
-                    },
-                    is_time_consuming=False,
-                    is_difficult=False,
-                    weight=1,
-                )]
-            )
-            
-        if self.include_job_challenges:
+                        is_time_consuming=False,
+                        is_difficult=False,
+                        weight=2,
+                    ),
+                ])
+
+            if Empty:
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Drive from LOC1 to LOC2",
+                        data={
+                            "LOC1": (self.locations, 1),
+                            "LOC2": (self.locations, 1)
+                        },
+                        is_time_consuming=False,
+                        is_difficult=False,
+                        weight=2,
+                    ),
+                    GameObjectiveTemplate(
+                        label="Drive from LOC1 to LOC2 using ANNA's autodrive",
+                        data={
+                            "LOC1": (self.locations, 1),
+                            "LOC2": (self.locations, 1)
+                        },
+                        is_time_consuming=False,
+                        is_difficult=False,
+                        weight=2,
+                    ),
+                ])
+
+        if "Job" in self.challenge_sets: 
             templates.extend([
                 GameObjectiveTemplate(
                     label="Get at least STAR stars on a job shift",
@@ -405,56 +603,132 @@ class ForzaHorizon6Game(Game):
                     is_time_consuming=False,
                     is_difficult=False,
                     weight=1,
-                )]
-            )
-                
-        if self.include_gift_challenges:
-            templates.append(                
-                GameObjectiveTemplate(
-                    label="Gift a car",
-                    data={},
-                    is_time_consuming=False,
-                    is_difficult=True,
-                    weight=1,
                 )
-            )
-            
-        if self.include_mastery_challenges:
+            ])
+
+        if "Story" in self.challenge_sets: 
             templates.extend([
                 GameObjectiveTemplate(
-                    label="Complete the Mastery Tree of a car from the following brand: BRAND",
+                    label="Get at least STAR stars on the following Story Chapter: STORY",
                     data={
-                        "BRAND": (self.car_brands, 1),
+                        "STAR": (self.star_amount_range, 1),
+                        "STORY": (self.stories, 1),
                     },
-                    is_time_consuming=True,
-                    is_difficult=True,
+                    is_time_consuming=False,
+                    is_difficult=False,
                     weight=1,
                 ),
+            ])
+
+        if "Time Attack" in self.challenge_sets:
+            Empty = True
+
+            if "Brand" in self.condition_sets:
+                Empty = False
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Complete LAP laps on TA with a car from the following brand: BRAND",
+                        data={
+                            "LAP": (self.time_attack_lap_range, 1),
+                            "TA": (self.time_attack, 1),
+                            "BRAND": (self.car_brands, 1),
+                        },
+                        is_time_consuming=True,
+                        is_difficult=False,
+                        weight=1,
+                    ),
+                ])
+                
+            if "Class" in self.condition_sets:
+                Empty = False
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Complete LAP laps on TA with a car from the following class: CLASS",
+                        data={
+                            "LAP": (self.time_attack_lap_range, 1),
+                            "TA": (self.time_attack, 1),
+                            "CLASS": (self.car_classes, 1),
+                        },
+                        is_time_consuming=True,
+                        is_difficult=False,
+                        weight=1,
+                    ),
+                ])
+
+            if "Type" in self.condition_sets:
+                Empty = False
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Complete LAP laps on TA with a car from the following type: TYPE",
+                        data={
+                            "LAP": (self.time_attack_lap_range, 1),
+                            "TA": (self.time_attack, 1),
+                            "TYPE": (self.car_types, 1),
+                        },
+                        is_time_consuming=True,
+                        is_difficult=False,
+                        weight=1,
+                    ),
+                ])
+
+            if "Car" in self.condition_sets:
+                Empty = False
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Complete LAP laps on TA with the following car: CAR",
+                        data={
+                            "LAP": (self.time_attack_lap_range, 1),
+                            "TA": (self.time_attack, 1),
+                            "CAR": (self.cars, 1),
+                        },
+                        is_time_consuming=True,
+                        is_difficult=False,
+                        weight=1,
+                    ),
+                ])
+
+            if Empty:
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Complete LAP laps on TA",
+                        data={
+                            "LAP": (self.time_attack_lap_range, 1),
+                            "TA": (self.time_attack, 1),
+                        },
+                        is_time_consuming=True,
+                        is_difficult=False,
+                        weight=1,
+                    ),
+                ])
+
+        if "EventLab" in self.challenge_sets: 
+            templates.extend([
                 GameObjectiveTemplate(
-                    label="Complete the Mastery Tree of a car from the following class: CLASS",
+                    label="Play the EVENTLAB EventLab Blueprint on page PAGE of the TAB tab",
                     data={
-                        "CLASS": (self.car_classes, 1),
+                        "EVENTLAB": (self.eventlab, 1),
+                        "PAGE": (self.eventlab_page_range, 1),
+                        "TAB": (self.eventlab_tabs, 1),
                     },
-                    is_time_consuming=True,
-                    is_difficult=True,
-                    weight=1,
+                    is_time_consuming=False,
+                    is_difficult=False,
+                    weight=2,
                 ),
-                GameObjectiveTemplate(
-                    label="Complete the Mastery Tree of a car from the following type: TYPE",
-                    data={
-                        "TYPE": (self.car_types, 1),
-                    },
-                    is_time_consuming=True,
-                    is_difficult=True,
-                    weight=1,
-                )]
-            )
+            ])
         
         return templates
                 
     @property
     def car_sets(self) -> List[str]:
-        return sorted(self.archipelago_options.forza_horizon_6_car_set.value)
+        return sorted(self.archipelago_options.forza_horizon_6_car_set.value)   
+
+    @property
+    def challenge_sets(self) -> List[str]:
+        return sorted(self.archipelago_options.forza_horizon_6_challenge_type.value)
+
+    @property
+    def condition_sets(self) -> List[str]:
+        return sorted(self.archipelago_options.forza_horizon_6_condition_type.value)
 
     @property
     def has_car_set_playlist_history(self) -> bool:
@@ -471,6 +745,10 @@ class ForzaHorizon6Game(Game):
     @property
     def has_car_set_playlist_exotics(self) -> bool:
         return "Playlist Italian Exotics" in self.car_sets
+        
+    @property
+    def has_car_set_playlist_mascot(self) -> bool:
+        return "Playlist Horizon Mascot Party" in self.car_sets
 
     @property
     def has_car_set_wheelspin(self) -> bool:
@@ -507,6 +785,10 @@ class ForzaHorizon6Game(Game):
     @property
     def include_car_challenges(self) -> bool:
         return bool(self.archipelago_options.forza_horizon_6_car_challenge.value)
+        
+    @property
+    def include_only_car_challenges(self) -> bool:
+        return bool(self.archipelago_options.forza_horizon_6_only_car_challenge.value)
 
     @property
     def include_job_challenges(self) -> bool:
@@ -547,6 +829,7 @@ class ForzaHorizon6Game(Game):
             "Legend Island Circuit",
             "Seaside Park Sprint",
             "Tateyama Kurobe Sprint",
+            "Endamame Circuit",
         ]
 
     @functools.cached_property
@@ -1825,6 +2108,32 @@ class ForzaHorizon6Game(Game):
         ]
     
     @functools.cached_property
+    def playlist_horizon_mascot_party_cars(self) -> List[str]:
+        return [
+            # Series
+            "1970 Honda N600 (D Class)",
+            "1967 Renault 8 Gordini (D Class)",
+            
+            # Summer
+            "2018 Exomotive V8 XP-5 (S2 Class)",
+            "1969 Datsun 2000 Roadster (D Class)",
+            
+            # Autumn
+            "2024 Chevrolet Camaro ZL1 (S1 Class)",
+            "2016 Abarth 695 Biposto (B Class)",
+            
+            # Winter
+            "1974 Toyota Celica GT (D Class)",
+            "1989 Toyota MR2 SC (D Class)",
+            
+            # Spring
+            "1988 Mitsubishi Starion ESI-R (C Class)",
+            "1968 Dodge Dart HEMI Super Stock (B Class)",
+            
+            # Exclusive Reward
+        ]
+    
+    @functools.cached_property
     def wheelspin_cars(self) -> List[str]:
         return [
             "2019 Apollo Intensa Emozione (R Class)",
@@ -1889,6 +2198,10 @@ class ForzaHorizon6Game(Game):
             "1998 Nissan Skyline GT-R 40th Anniversary (B Class)",
             "2023 Toyota GR Corolla (B Class)",
             "2024 Toyota Prius Prime XSE Premium (C Class)",
+            "1968 Alfa Romeo Autodelta Tipo 33/2 Daytona (A Class)",
+            "1957 Ford Thunderbird (D Class)",
+            "1983 Nissan Skyline 2000 Turbo RS (C Class)",
+            "1987 Porsche #203 Porsche AG 961 (S2 Class)",
         ]
         
     @functools.cached_property
@@ -1960,6 +2273,9 @@ class ForzaHorizon6Game(Game):
         
         if self.has_car_set_playlist_exotics:
             cars.extend(self.playlist_italian_exotics_cars)
+        
+        if self.has_car_set_playlist_mascot:
+            cars.extend(self.playlist_horizon_mascot_party_cars)
         
         if self.has_car_set_wheelspin:
             cars.extend(self.wheelspin_cars)
@@ -2101,25 +2417,38 @@ class ForzaHorizon6Game(Game):
         return range(1, 10)
         
 # Archipelago Options
-class ForzaHorizon6IncludeCarChallenges(DefaultOnToggle):
-    """Indicates whether challenges can require specific cars in Forza Horizon 6"""
-    display_name = "Forza Horizon 6 Include Car Challenges"
-    
-class ForzaHorizon6IncludeGiftChallenge(DefaultOnToggle):
-    """Indicates whether challenges can require sending Gifts in Forza Horizon 6"""
-    display_name = "Forza Horizon 6 Include Gift Challenge"
-    
-class ForzaHorizon6IncludeCruisingChallenges(DefaultOnToggle):
-    """Indicates whether challenges can require driving between 2 locations in Forza Horizon 6"""
-    display_name = "Forza Horizon 6 Include Cruise Challenges"
-    
-class ForzaHorizon6IncludeJobChallenges(DefaultOnToggle):
-    """Indicates whether challenges can require doing Jobs in Forza Horizon 6"""
-    display_name = "Forza Horizon 6 Include Job Challenges"
-    
-class ForzaHorizon6IncludeMasteryChallenges(DefaultOnToggle):
-    """Indicates whether challenges can require completing Mastery Trees in Forza Horizon 6"""
-    display_name = "Forza Horizon 6 Include Mastery Challenges"
+class ForzaHorizon6IncludeChallengeType(OptionSet):
+    """Indicates which type of challenge should be included"""
+    display_name = "Forza Horizon 6 Challenge Type"
+    valid_keys = {
+        "Single Race",
+        "Championship Race",
+        "Rival",
+        "PR Stunt",
+        "Skill",
+        "Car Mastery",
+        "Gift",
+        "Online Round",
+        "Cruise",
+        "Job",
+        "Story",
+        "Time Attack",
+        "EventLab"
+    }
+
+    default = valid_keys
+
+class ForzaHorizon6IncludeConditionType(OptionSet):
+    """Indicates which type of condition should be included"""
+    display_name = "Forza Horizon 6 Challenge Type"
+    valid_keys = {
+        "Brand",
+        "Class",
+        "Type",
+        "Car"
+    }
+
+    default = valid_keys
     
 class ForzaHorizon6IncludeCarSet(OptionSet):
     """Indicates which pack of cars (Time-Gated exclusive, Wheelspin or DLC) can be required for car challenges"""
@@ -2129,6 +2458,7 @@ class ForzaHorizon6IncludeCarSet(OptionSet):
         "Playlist Welcome To Japan",
         "Playlist Horizon Decades",
         "Playlist Italian Exotics",
+        "Playlist Horizon Mascot Party",
         "Wheelspin",
         "Car Pass DLC",
         "Partnership DLC",
