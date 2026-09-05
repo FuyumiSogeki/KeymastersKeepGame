@@ -17,3 +17,7 @@ Keymaster's Keep games maintained by FuyumiSogeki
 - Complete Mastery Tree of random types, brands, classes of cars (optional)
 - Complete Mastery Tree of random cars (optional)
 - Gift car (optional)
+
+### Rabbit & Steel (Extra)
+Forked from https://github.com/Silvris/KeymastersKeepGames
+- ToDo
