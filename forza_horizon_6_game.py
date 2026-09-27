@@ -17,6 +17,8 @@ class ForzaHorizon6ArchipelagoOptions:
     forza_horizon_6_car_set: ForzaHorizon6IncludeCarSet
     forza_horizon_6_challenge_type: ForzaHorizon6IncludeChallengeType
     forza_horizon_6_condition_type: ForzaHorizon6IncludeConditionType
+    forza_horizon_6_use_car_list: ForzaHorizon6IncludeMyCarList
+    forza_horizon_6_car_list: ForzaHorizon6MyCarList
     
 class ForzaHorizon6Game(Game):
     name = "Forza Horizon 6"
@@ -88,6 +90,7 @@ class ForzaHorizon6Game(Game):
                     weight=1,
                 ),
             ])
+            # Opp Num, Weather, Time of Day, Lap, Traffic
 
             if "Brand" in self.condition_sets:
                 Empty = False
@@ -141,10 +144,10 @@ class ForzaHorizon6Game(Game):
                 Empty = False
                 templates.extend([
                     GameObjectiveTemplate(
-                        label="Finish PLACEMENT on TRACKS with the following car: CAR",
+                        label="Finish PLACEMENT on TRACK with the following car: CAR",
                         data={
                             "PLACEMENT": (self.race_placements, 1),
-                            "TRACKS": (self.tracks, 3),
+                            "TRACK": (self.tracks_including_long, 1),
                             "CAR": (self.cars, 1),
                         },
                         is_time_consuming=True,
@@ -167,8 +170,9 @@ class ForzaHorizon6Game(Game):
                     ),
                 ])
 
-        if "Championship Race" in self.challenge_sets:
+        if "Triple Race" in self.challenge_sets:
             Empty = True
+
             if "Brand" in self.condition_sets:
                 Empty = False
                 templates.extend([
@@ -247,6 +251,114 @@ class ForzaHorizon6Game(Game):
                     ),
                 ])
 
+        if "Custom Race" in self.challenge_sets:
+            Empty = True
+            # Opp Num, Weather, Time of Day, Lap, Traffic
+
+            if "Brand" in self.condition_sets:
+                Empty = False
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Finish PLACEMENT on TRACK (OPP opponents, LAP laps, WHEATHER weather, TIME, TRAFFIC) with a car from the following brand: BRAND",
+                        data={
+                            "PLACEMENT": (self.race_placements, 1),
+                            "TRACK": (self.tracks_including_long, 1),
+                            "OPP": (self.opp_number, 1),
+                            "LAP": (self.lap_number, 1),
+                            "WEATHER": (self.weather, 1),
+                            "TIME": (self.time, 1),
+                            "TRAFFIC": (self.traffic, 1),
+                            "BRAND": (self.car_brands, 1),
+                        },
+                        is_time_consuming=False,
+                        is_difficult=False,
+                        weight=2,
+                    ),
+                ])
+
+            if "Class" in self.condition_sets:
+                Empty = False
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Finish PLACEMENT on TRACK (OPP opponents, LAP laps, WHEATHER weather, TIME, TRAFFIC) with a car from the following class: CLASS",
+                        data={
+                            "PLACEMENT": (self.race_placements, 1),
+                            "TRACK": (self.tracks_including_long, 1),
+                            "OPP": (self.opp_number, 1),
+                            "LAP": (self.lap_number, 1),
+                            "WEATHER": (self.weather, 1),
+                            "TIME": (self.time, 1),
+                            "TRAFFIC": (self.traffic, 1),
+                            "CLASS": (self.car_classes, 1),
+                        },
+                        is_time_consuming=False,
+                        is_difficult=False,
+                        weight=2,
+                    ),
+                ])
+
+            if "Type" in self.condition_sets:
+                Empty = False
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Finish PLACEMENT on TRACK (OPP opponents, LAP laps, WHEATHER weather, TIME, TRAFFIC) with a car from the following type: TYPE",
+                        data={
+                            "PLACEMENT": (self.race_placements, 1),
+                            "TRACK": (self.tracks_including_long, 1),
+                            "OPP": (self.opp_number, 1),
+                            "LAP": (self.lap_number, 1),
+                            "WEATHER": (self.weather, 1),
+                            "TIME": (self.time, 1),
+                            "TRAFFIC": (self.traffic, 1),
+                            "TYPE": (self.car_types, 1),
+                        },
+                        is_time_consuming=False,
+                        is_difficult=False,
+                        weight=2,
+                    ),
+                ])
+
+            if "Car" in self.condition_sets:
+                Empty = False
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Finish PLACEMENT on TRACK (OPP opponents, LAP laps, WHEATHER weather, TIME, TRAFFIC) with a car from the following car: CAR",
+                        data={
+                            "PLACEMENT": (self.race_placements, 1),
+                            "TRACK": (self.tracks_including_long, 1),
+                            "OPP": (self.opp_number, 1),
+                            "LAP": (self.lap_number, 1),
+                            "WEATHER": (self.weather, 1),
+                            "TIME": (self.time, 1),
+                            "TRAFFIC": (self.traffic, 1),
+                            "CAR": (self.cars, 1),
+                        },
+                        is_time_consuming=True,
+                        is_difficult=False,
+                        weight=4,
+                    ),
+                ])
+
+            if Empty:
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Finish PLACEMENT on TRACK (OPP opponents, LAP laps, WHEATHER weather, TIME, TRAFFIC)",
+                        data={
+                            "PLACEMENT": (self.race_placements, 1),
+                            "TRACK": (self.tracks_including_long, 1),
+                            "OPP": (self.opp_number, 1),
+                            "LAP": (self.lap_number, 1),
+                            "WEATHER": (self.weather, 1),
+                            "TIME": (self.time, 1),
+                            "TRAFFIC": (self.traffic, 1),
+                        },
+                        is_time_consuming=True,
+                        is_difficult=False,
+                        weight=4,
+                    ),
+                ])
+
+
         if "Rival" in self.challenge_sets: 
             templates.extend([
                 GameObjectiveTemplate(
@@ -279,6 +391,16 @@ class ForzaHorizon6Game(Game):
                         is_difficult=False,
                         weight=2,
                     ),
+                    GameObjectiveTemplate(
+                        label="Beat your closest rival on the Rivals leaderboard for TRACK with CLASS car",
+                        data={
+                            "TRACK": (self.tracks_including_long, 1),
+                            "CLASS": (self.car_classes_alternate, 1),
+                        },
+                        is_time_consuming=True,
+                        is_difficult=True,
+                        weight=3,
+                    ),
                 ])
 
             if "Car" in self.condition_sets:
@@ -294,6 +416,16 @@ class ForzaHorizon6Game(Game):
                         is_difficult=False,
                         weight=3,
                     ),
+                    GameObjectiveTemplate(
+                        label="Beat your closest rival on the Rivals leaderboard for TRACK with the following car : CAR",
+                        data={
+                            "TRACK": (self.tracks_including_long, 1),
+                            "CAR": (self.cars, 1),
+                        },
+                        is_time_consuming=True,
+                        is_difficult=True,
+                        weight=3,
+                    ),
                 ])
 
             if Empty:
@@ -305,6 +437,15 @@ class ForzaHorizon6Game(Game):
                         },
                         is_time_consuming=False,
                         is_difficult=False,
+                        weight=3,
+                    ),
+                    GameObjectiveTemplate(
+                        label="Beat your closest rival on the Rivals leaderboard for TRACK",
+                        data={
+                            "TRACK": (self.tracks_including_long, 1),
+                        },
+                        is_time_consuming=True,
+                        is_difficult=True,
                         weight=3,
                     ),
                 ])
@@ -701,6 +842,87 @@ class ForzaHorizon6Game(Game):
                     ),
                 ])
 
+        if "Drift Attack" in self.challenge_sets:
+            Empty = True
+
+            if "Brand" in self.condition_sets:
+                Empty = False
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Score at least POINTS on DA with a car from the following brand: BRAND",
+                        data={
+                            "POINTS": (self.drift_attack_score_range, 1),
+                            "DA": (self.base_drift_attack, 1),
+                            "BRAND": (self.car_brands, 1),
+                        },
+                        is_time_consuming=True,
+                        is_difficult=False,
+                        weight=1,
+                    ),
+                ])
+                
+            if "Class" in self.condition_sets:
+                Empty = False
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Score at least POINTS on DA with a car from the following class: CLASS",
+                        data={
+                            "POINTS": (self.drift_attack_score_range, 1),
+                            "DA": (self.base_drift_attack, 1),
+                            "CLASS": (self.car_classes, 1),
+                        },
+                        is_time_consuming=True,
+                        is_difficult=False,
+                        weight=1,
+                    ),
+                ])
+
+            if "Type" in self.condition_sets:
+                Empty = False
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Score at least POINTS on DA with a car from the following type: TYPE",
+                        data={
+                            "POINTS": (self.drift_attack_score_range, 1),
+                            "DA": (self.base_drift_attack, 1),
+                            "TYPE": (self.car_types, 1),
+                        },
+                        is_time_consuming=True,
+                        is_difficult=False,
+                        weight=1,
+                    ),
+                ])
+
+            if "Car" in self.condition_sets:
+                Empty = False
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Score at least POINTS on DA with the following car: CAR",
+                        data={
+                            "POINTS": (self.drift_attack_score_range, 1),
+                            "DA": (self.base_drift_attack, 1),
+                            "CAR": (self.cars, 1),
+                        },
+                        is_time_consuming=True,
+                        is_difficult=False,
+                        weight=1,
+                    ),
+                ])
+
+            if Empty:
+                templates.extend([
+                    GameObjectiveTemplate(
+                        label="Score at least POINTS on DA",
+                        data={
+                            "POINTS": (self.drift_attack_score_range, 1),
+                            "DA": (self.base_drift_attack, 1),
+                        },
+                        is_time_consuming=True,
+                        is_difficult=False,
+                        weight=1,
+                    ),
+                ])
+
         if "EventLab" in self.challenge_sets: 
             templates.extend([
                 GameObjectiveTemplate(
@@ -731,6 +953,10 @@ class ForzaHorizon6Game(Game):
         return sorted(self.archipelago_options.forza_horizon_6_condition_type.value)
 
     @property
+    def my_car_list(self) -> List[str]:
+        return sorted(self.archipelago_options.forza_horizon_6_car_list.value)
+
+    @property
     def has_car_set_playlist_history(self) -> bool:
         return "Playlist History" in self.car_sets
 
@@ -749,6 +975,10 @@ class ForzaHorizon6Game(Game):
     @property
     def has_car_set_playlist_mascot(self) -> bool:
         return "Playlist Horizon Mascot Party" in self.car_sets
+        
+    @property
+    def has_car_set_playlist_british(self) -> bool:
+        return "Playlist British Automotive" in self.car_sets
 
     @property
     def has_car_set_wheelspin(self) -> bool:
@@ -804,7 +1034,11 @@ class ForzaHorizon6Game(Game):
         
     @property
     def include_mastery_challenges(self) -> bool:
-        return bool(self.archipelago_options.forza_horizon_6_mastery_challenge.value)
+        return bool(self.archipelago_options.forza_horizon_6_mastery_challenge.value)    
+
+    @property
+    def use_car_list(self) -> bool:
+        return bool(self.archipelago_options.forza_horizon_6_use_car_list.value)
 
     @functools.cached_property
     def tracks_base_road(self) -> List[str]:
@@ -1449,6 +1683,48 @@ class ForzaHorizon6Game(Game):
         ]
 
     @staticmethod
+    def opp_number() -> range:
+        return range(4, 12)
+
+    @staticmethod
+    def lap_number() -> range:
+        return range(1, 6)
+
+    @staticmethod
+    def weather() -> List[str]:
+        return [
+            "Clear",
+            "Clear Post-Rain",
+            "Cloudy",
+            "Cloudy Post-Rain",
+            "Overcast",
+            "Light Precipitation",
+            "Heavy Precipitation",
+            "Gale",
+            "Fog",
+        ]
+
+    @staticmethod
+    def time() -> List[str]:
+        return [
+            "Dawn",
+            "Sunrise",
+            "Morning",
+            "Early Afternoon",
+            "Late Afternoon",
+            "Sunset",
+            "Evening",
+            "Night",
+        ]
+
+    @staticmethod
+    def traffic() -> List[str]:
+        return [
+            "Traffic ON",
+            "Traffic OFF",
+        ]
+
+    @staticmethod
     def cameras() -> List[str]:
         return [
             "BUMPER",
@@ -1485,624 +1761,608 @@ class ForzaHorizon6Game(Game):
     @functools.cached_property
     def base_cars(self) -> List[str]:
         return [
-            "1973 Mazda RX-3 Forza Edition (B Class)",
-            "1994 Mazda MX-5 Miata Forza Edition (S2 Class)",
-            "2022 Subaru BRZ Forza Edition (A Class)",
-            "1992 Alfa Romeo 155 Q4 (C Class)",
-            "2014 Alfa Romeo 4C (A Class)",
-            "1964 Aston Martin DB5 (C Class)",
-            "2019 Aston Martin Vantage (A Class)",
-            "1987 Buick Regal GNX (C Class)",
-            "1999 Dodge Viper GTS ACR (B Class)",
-            "2002 Ferrari Enzo Ferrari (S1 Class)",
-            "1965 Ford Mustang GT Coupe (D Class)",
-            "2009 Ford Focus RS (B Class)",
-            "1970 GMC Jimmy (C Class)",
-            "1986 Honda Civic Si (D Class)",
-            "2016 Koenigsegg Regera (S2 Class)",
-            "2020 Land Rover Defender 110 X (C Class)",
-            "2010 Lexus LFA (A Class)",
-            "2016 Mazda MX-5 (C Class)",
-            "2018 McLaren 600LT Coupé (S1 Class)",
-            "1990 Mercedes-Benz 190 E 2.5-16 Evolution II (C Class)",
-            "2012 Mercedes-Benz C 63 AMG Coupé Black Series (A Class)",
-            "2001 Mitsubishi Lancer Evolution VI GSR TM Edition (B Class)",
-            "1987 Nissan Skyline GTS-R (C Class)",
-            "1989 Nissan Silvia K's (C Class)",
-            "1994 Nissan Fairlady Z Version S Twin Turbo (C Class)",
-            "2010 Pagani Zonda Cinque Roadster (S2 Class)",
-            "2024 Ram 1500 TRX (B Class)",
-            "2018 TVR Griffith (S1 Class)",
-            "1992 Toyota Celica GT-Four RC ST185 (C Class)",
-            "2023 Toyota Camry TRD (B Class)",
-            "2554 AMG Transport Dynamics M12S Warthog CST (A Class)",
-            "1962 Ferrari 250 GT Berlinetta Lusso (C Class)",
-            "1987 Ferrari F40 (A Class)",
-            "2017 Ford #14 Rahal Letterman Lanigan Racing Fiesta (S1 Class)",
-            "2017 Ford #25 'Brocky' Ultra4 Bronco RTR (A Class)",
-            "2017 Ford Focus RS (B Class)",
-            "2024 Ford Mustang Dark Horse (A Class)",
-            "1997 Formula Drift #777 Nissan 240SX (S1 Class)",
-            "2007 Formula Drift #117 599 GTB Fiorano (S1 Class)",
-            "2009 Formula Drift #99 Mazda RX-8 (S1 Class)",
-            "2020 Gordon Murray Automotive T.50 (S2 Class)",
-            "2005 Honda NSX-R (B Class)",
-            "1991 Jaguar Sport XJR-15 (S1 Class)",
-            "2017 Koenigsegg Agera RS (S2 Class)",
-            "2019 Lamborghini Urus (A Class)",
-            "2024 Lamborghini Revuelto (S2 Class)",
-            "2015 Land Rover Range Rover Sport SVR (A Class)",
-            "1997 Maserati Ghibli Cup (B Class)",
-            "1992 Mazda RX-7 Type R (B Class)",
-            "2017 Mazda MX-5 Cup (B Class)",
-            "2013 Mercedes-Benz G 65 AMG (B Class)",
-            "2024 Nissan GT-R Nismo (S1 Class)",
-            "1984 Opel Manta 400 (B Class)",
-            "2021 Polaris RZR Pro XP Ultimate (C Class)",
-            "1970 Porsche #3 917 LH (S1 Class)",
-            "2012 Porsche 911 GT3 RS 4.0 (S1 Class)",
-            "2014 Porsche 918 Spyder (S2 Class)",
-            "2022 Porsche 718 Cayman GT4 RS (S1 Class)",
-            "2016 RJ Anderson #37 Polaris RZR Pro 2 Truck (A Class)",
-            "1997 Toyota Chaser 2.5 Tourer V (B Class)",
-            "1963 Volkswagen Type 2 De Luxe (D Class)",
-            "2016 Ariel Nomad (A Class)",
-            "2022 Aston Martin Valkyrie AMR Pro (R Class)",
-            "2019 BMW Z4 Roadster (A Class)",
-            "2021 Bentley Continental GT Convertible (A Class)",
-            "1969 Dodge Charger Daytona HEMI (C Class)",
-            "2018 Dodge Challenger SRT Demon (A Class)",
-            "1984 Honda City E II (D Class)",
-            "1991 Honda Beat (D Class)",
-            "1994 Honda Acty (D Class)",
-            "1994 Honda Prelude Si (C Class)",
-            "2023 Honda Civic Type R (A Class)",
-            "1986 MG Metro 6R4 (A Class)",
-            "1997 Toyota Soarer 2.5 GT-T (C Class)",
-            "1998 Toyota Supra RZ (B Class)",
-            "2020 Toyota GR Supra (A Class)",
-            "1968 Abarth 595 esseesse (D Class)",
-            "1980 Abarth Fiat 131 (D Class)",
-            "2001 Acura Integra Type R (C Class)",
-            "2002 Acura RSX Type S (C Class)",
-            "2023 Acura Integra A-Spec (C Class)",
-            "1965 Alfa Romeo Giulia Sprint GTA Stradale (D Class)",
-            "1968 Alfa Romeo 33 Stradale (B Class)",
-            "2007 Alfa Romeo 8C Competizione (A Class)",
-            "2017 Alfa Romeo Giulia Quadrifoglio (A Class)",
-            "2015 Alumicraft Class 10 Race Car (B Class)",
-            "2021 Alumicraft #122 Class 1 Buggy (B Class)",
-            "2022 Alumicraft #6165 Trick Truck (C Class)",
-            "2013 Ariel Atom 500 V8 (S2 Class)",
-            "2017 Aston Martin DB11 (A Class)",
-            "2017 Aston Martin Vulcan AMR Pro (S2 Class)",
-            "2023 Aston Martin Valkyrie (R Class)",
-            "1986 Audi #2 Audi Sport quattro S1 (S1 Class)",
-            "2001 Audi RS 4 Avant (B Class)",
-            "2003 Audi RS 6 (B Class)",
-            "2006 Audi RS 4 (B Class)",
-            "2009 Audi R8 LMS (S2 Class)",
-            "2009 Audi RS 6 (B Class)",
-            "2010 Audi TT RS Coupé (B Class)",
-            "2011 Audi RS 3 Sportback (B Class)",
-            "2011 Audi RS 5 Coupé (A Class)",
-            "2013 Audi RS 4 Avant (A Class)",
-            "2013 Audi RS 7 Sportback (A Class)",
-            "2015 Audi RS 6 Avant (A Class)",
-            "2015 Audi S1 (B Class)",
-            "2016 Audi R8 V10 plus (S1 Class)",
-            "2018 Audi RS 4 Avant (A Class)",
-            "2020 Audi R8 V10 performance (S1 Class)",
-            "2020 Audi RS 3 Sedan (A Class)",
-            "2021 Audi RS 6 Avant (A Class)",
-            "2021 Audi RS 7 Sportback (A Class)",
-            "2021 Audi RS e-tron GT (A Class)",
-            "1965 Austin-Healey 3000 MkIII (D Class)",
-            "1993 Autozam AZ-1 (D Class)",
-            "2014 BAC Mono (S1 Class)",
-            "1957 BMW Isetta 300 Export (D Class)",
-            "1973 BMW 2002 Turbo (C Class)",
-            "1988 BMW M3 (C Class)",
-            "1988 BMW M5 (C Class)",
-            "1995 BMW 850CSi (C Class)",
-            "1995 BMW M5 (B Class)",
-            "1997 BMW M3 (B Class)",
-            "2003 BMW M5 (B Class)",
-            "2005 BMW M3 (B Class)",
-            "2008 BMW M3 (A Class)",
-            "2008 BMW Z4 M Coupé (B Class)",
-            "2009 BMW M5 (B Class)",
-            "2010 BMW M3 GTS (A Class)",
-            "2011 BMW X5 M (B Class)",
-            "2012 BMW M5 (A Class)",
-            "2014 BMW M4 Coupé (A Class)",
-            "2015 BMW i8 (A Class)",
-            "2016 BMW M4 GTS (S1 Class)",
-            "2020 BMW M8 Competition Coupé (A Class)",
-            "2021 BMW M4 Competition Coupé (A Class)",
-            "2022 BMW M5 CS (S1 Class)",
-            "2022 BMW iX xDrive50 (B Class)",
-            "2023 BMW M2 (A Class)",
-            "2024 BMW X6 M Competition (A Class)",
-            "2013 Cadillac XTS Limousine (D Class)",
-            "2016 Cadillac ATS-V (A Class)",
-            "2016 Cadillac CTS-V Sedan (A Class)",
-            "2022 Cadillac CT4-V Blackwing (A Class)",
-            "2022 Cadillac CT5-V Blackwing (S1 Class)",
-            "2018 Can-Am Maverick X RS Turbo R (B Class)",
-            "1953 Chevrolet Corvette (D Class)",
-            "1955 Chevrolet 150 Utility Sedan (D Class)",
-            "1957 Chevrolet Bel Air (D Class)",
-            "1964 Chevrolet Impala Super Sport 409 (C Class)",
-            "1969 Chevrolet Camaro Super Sport Coupe (C Class)",
-            "1969 Chevrolet Nova Super Sport 396 (C Class)",
-            "1970 Chevrolet Camaro Z28 (C Class)",
-            "1970 Chevrolet Chevelle Super Sport 454 (C Class)",
-            "1970 Chevrolet Corvette ZR-1 (C Class)",
-            "1970 Chevrolet El Camino Super Sport 454 (C Class)",
-            "1972 Chevrolet K-10 Custom (D Class)",
-            "1979 Chevrolet Camaro Z28 (D Class)",
-            "1988 Chevrolet Monte Carlo Super Sport (D Class)",
-            "1995 Chevrolet Corvette ZR-1 (B Class)",
-            "1996 Chevrolet Impala Super Sport (C Class)",
-            "2002 Chevrolet Corvette Z06 (A Class)",
-            "2009 Chevrolet Corvette ZR1 (S1 Class)",
-            "2015 Chevrolet Camaro Z/28 (A Class)",
-            "2015 Chevrolet Corvette Z06 (S1 Class)",
-            "2017 Chevrolet Camaro ZL1 (S1 Class)",
-            "2018 Chevrolet Camaro ZL1 1LE (S1 Class)",
-            "2020 Chevrolet Corvette Stingray Coupe (A Class)",
-            "2020 Chevrolet Silverado LT Trail Boss (C Class)",
-            "2023 Chevrolet Corvette Z06 (S1 Class)",
-            "1970 Datsun 510 (D Class)",
-            "2013 DeBerti Jeep Wrangler Unlimited (A Class)",
-            "2018 DeBerti Chevrolet Silverado 1500 Drift Truck (S1 Class)",
-            "2019 DeBerti Ford Super Duty F-250 Lariat 'Transformer' (B Class)",
-            "2019 DeBerti Toyota Tacoma TRD ‘The Performance Truck’ (S1 Class)",
-            "1982 DeLorean DMC-12 (D Class)",
-            "1970 Dodge Coronet Super Bee (C Class)",
-            "2008 Dodge Viper SRT-10 ACR (S1 Class)",
-            "2015 Dodge Challenger SRT Hellcat (A Class)",
-            "2015 Dodge Charger SRT Hellcat (A Class)",
-            "2022 Dodge Challenger SRT Super Stock (A Class)",
-            "1962 Ferrari 250 GTO (C Class)",
-            "1967 Ferrari #24 Ferrari Spa 330 P4 (A Class)",
-            "1969 Ferrari Dino 246 GT (C Class)",
-            "1970 Ferrari 512 S (S1 Class)",
-            "1989 Ferrari F40 Competizione (R Class)",
-            "1995 Ferrari F50 (A Class)",
-            "2005 Ferrari FXX (S2 Class)",
-            "2007 Ferrari 430 Scuderia (S1 Class)",
-            "2009 Ferrari 458 Italia (S1 Class)",
-            "2010 Ferrari 599XX (S2 Class)",
-            "2013 Ferrari 458 Speciale (S1 Class)",
-            "2013 Ferrari LaFerrari (S2 Class)",
-            "2014 Ferrari FXX K (R Class)",
-            "2015 Ferrari 488 GTB (S1 Class)",
-            "2015 Ferrari F12tdf (S1 Class)",
-            "2017 Ferrari 812 Superfast (S1 Class)",
-            "2017 Ferrari J50 (S1 Class)",
-            "2018 Ferrari FXX-K Evo (R Class)",
-            "2018 Ferrari Portofino (S1 Class)",
-            "2019 Ferrari 488 Pista (S2 Class)",
-            "2019 Ferrari Monza SP2 (S1 Class)",
-            "2020 Ferrari SF90 Stradale (S2 Class)",
-            "1932 Ford De Luxe Five-Window Coupe (D Class)",
-            "1966 Ford #2 GT40 Mk II (A Class)",
-            "1968 Ford Mustang GT 2+2 Fastback (D Class)",
-            "1969 Ford Mustang Boss 302 (C Class)",
-            "1973 Ford Capri RS3100 (D Class)",
-            "1973 Ford XB Falcon GT (C Class)",
-            "1977 Ford #5 Escort RS1800 MkII (B Class)",
-            "1986 Ford F-150 XLT Lariat (D Class)",
-            "1992 Ford Escort RS Cosworth (C Class)",
-            "1993 Ford Mustang SVT Cobra R (C Class)",
-            "1994 Ford Supervan 3 (S1 Class)",
-            "1999 Ford Racing Puma (C Class)",
-            "2000 Ford Mustang SVT Cobra R (B Class)",
-            "2001 Ford #4 Ford Focus RS (A Class)",
-            "2003 Ford Focus RS (C Class)",
-            "2010 Ford Crown Victoria Police Interceptor (D Class)",
-            "2011 Ford Transit SuperSportVan (D Class)",
-            "2013 Ford Mustang Shelby GT500 (A Class)",
-            "2014 Ford #11 Rockstar F-150 Trophy Truck (A Class)",
-            "2014 Ford FPV Limited Edition Pursuit Ute (B Class)",
-            "2016 Ford Mustang Shelby GT350R (S1 Class)",
-            "2017 Ford GT (S1 Class)",
-            "2018 Ford Mustang RTR Spec 5 (A Class)",
-            "2020 Ford #2069 Ford Performance Bronco R (C Class)",
-            "2020 Ford Mustang Shelby GT500 (S1 Class)",
-            "2020 Ford Super Duty F-450 DRW PLATINUM (D Class)",
-            "2022 Ford Bronco Raptor (C Class)",
-            "2022 Ford Focus ST (B Class)",
-            "2023 Ford F-150 Raptor R (B Class)",
-            "2023 Ford Fiesta ST (C Class)",
-            "2024 Ford Mustang GT (A Class)",
-            "1989 Formula Drift #98 BMW 325i (S1 Class)",
-            "1995 Formula Drift #34 Toyota Supra MkIV (S1 Class)",
-            "2013 Formula Drift #777 Chevrolet Corvette (S1 Class)",
-            "2016 Formula Drift #530 HSV Maloo GEN-F (S1 Class)",
-            "2019 Formula Drift #411 Toyota Corolla Hatchback (S1 Class)",
-            "2020 Formula Drift #151 Toyota GR Supra (S1 Class)",
-            "2020 Formula Drift #91 BMW M2 (S1 Class)",
-            "2023 Formula Drift #64 Forsberg Racing Nissan Z (S1 Class)",
-            "1991 GMC Syclone (C Class)",
-            "1992 GMC Typhoon (C Class)",
-            "2022 GMC HUMMER EV Pickup (A Class)",
-            "2025 GR GT Prototype (S1 Class)",
-            "2014 HSV GEN-F GTS (A Class)",
-            "2014 HSV Limited Edition GEN-F GTS Maloo (A Class)",
-            "2019 Hennessey Ford F-150 VelociRaptor 6X6 (B Class)",
-            "2021 Hennessey Venom F5 (S2 Class)",
-            "1977 Holden Torana A9X (C Class)",
-            "1970 Honda S800 (D Class)",
-            "1992 Honda NSX-R (B Class)",
-            "1997 Honda Civic Type R (C Class)",
-            "2003 Honda S2000 (B Class)",
-            "2004 Honda Civic Type R (C Class)",
-            "2007 Honda Civic Type R (C Class)",
-            "2015 Honda Civic Type R (B Class)",
-            "2015 Honda Ridgeline Baja Trophy Truck (B Class)",
-            "2018 Honda Civic Type R (A Class)",
-            "2022 Honda e (D Class)",
-            "2019 Hyundai Veloster N (B Class)",
-            "2020 Hyundai i30 N (B Class)",
-            "2021 Hyundai i20 N (B Class)",
-            "2022 Hyundai N Vision 74 (A Class)",
-            "2023 Hyundai IONIQ 5 N (A Class)",
-            "1956 Jaguar D-Type (B Class)",
-            "1964 Jaguar Lightweight E-Type (B Class)",
-            "1993 Jaguar XJ220 (A Class)",
-            "1993 Jaguar XJ220S TWR (S1 Class)",
-            "2010 Jaguar C-X75 (S2 Class)",
-            "2012 Jeep Wrangler Rubicon (D Class)",
-            "2016 Jeep Trailcat (A Class)",
-            "2018 Jeep Grand Cherokee Trackhawk (A Class)",
-            "2020 Jeep JT (D Class)",
-            "2019 Jimco #240 Fastball Racing Class 6100 Spec Trophy Truck (B Class)",
-            "2020 Jimco #179 Hammerhead Class 1 (A Class)",
-            "2018 KTM X-Bow GT4 (S1 Class)",
-            "2008 Koenigsegg CCGT (S2 Class)",
-            "2011 Koenigsegg Agera (S2 Class)",
-            "2020 Koenigsegg Jesko (S2 Class)",
-            "1967 Lamborghini Miura P400 (B Class)",
-            "2010 Lamborghini Murciélago LP 670-4 SV (S1 Class)",
-            "2012 Lamborghini Gallardo LP570-4 Spyder Performante (A Class)",
-            "2013 Lamborghini Veneno (S2 Class)",
-            "2018 Lamborghini Aventador SVJ (S1 Class)",
-            "2020 Lamborghini Essenza SCV12 (R Class)",
-            "2020 Lamborghini Huracán STO (S1 Class)",
-            "2020 Lamborghini Sián Roadster (S1 Class)",
-            "2021 Lamborghini Countach LPI 800-4 (S1 Class)",
-            "2022 Lamborghini Huracán Tecnica (S1 Class)",
-            "1986 Lancia Delta S4 (B Class)",
-            "1992 Lancia Delta HF Integrale EVO (C Class)",
-            "2015 Lexus RC F (A Class)",
-            "2021 Lexus LC 500 (B Class)",
-            "1997 Lotus Elise GT1 (S1 Class)",
-            "1999 Lotus Elise Series 1 Sport 190 (B Class)",
-            "2020 Lotus Evija (R Class)",
-            "2024 Lucid Air Sapphire (S2 Class)",
-            "1965 MINI Cooper S (D Class)",
-            "2012 MINI John Cooper Works GP (B Class)",
-            "2013 MINI X-Raid All4 Racing Countryman (B Class)",
-            "2008 Maserati MC12 Versione Corsa (R Class)",
-            "2022 Maserati MC20 (S1 Class)",
-            "1973 Mazda RX-3 (D Class)",
-            "1990 Mazda Savanna RX-7 (C Class)",
-            "1994 Mazda MX-5 Miata (D Class)",
-            "2005 Mazda Mazdaspeed MX-5 (C Class)",
-            "2010 Mazda Mazdaspeed 3 (B Class)",
-            "2011 Mazda RX-8 R3 (B Class)",
-            "2013 Mazda MX-5 (C Class)",
-            "2022 Mazda MX-5 Miata RF (B Class)",
-            "1993 McLaren F1 (S1 Class)",
-            "1997 McLaren F1 GT (S1 Class)",
-            "2011 McLaren 12C Coupé (S1 Class)",
-            "2013 McLaren P1 (S2 Class)",
-            "2014 McLaren 650S Spider (S1 Class)",
-            "2015 McLaren 570S Coupé (S1 Class)",
-            "2019 McLaren Speedtail (S2 Class)",
-            "2021 McLaren 765LT Coupé (S2 Class)",
-            "2023 McLaren Artura (S1 Class)",
-            "2015 Mercedes-AMG GT S (A Class)",
-            "2016 Mercedes-AMG C 63 S Coupé (A Class)",
-            "2018 Mercedes-AMG E 63 S (A Class)",
-            "2020 Mercedes-AMG GT Black Series (S1 Class)",
-            "2020 Mercedes-AMG SLC 43 Final Edition (A Class)",
-            "2021 Mercedes-AMG Mercedes-AMG ONE (S2 Class)",
-            "2021 Mercedes-AMG SL 63 (A Class)",
-            "1954 Mercedes-Benz 300 SL Coupé (D Class)",
-            "1955 Mercedes-Benz 300 SLR (B Class)",
-            "1987 Mercedes-Benz AMG Hammer Coupe (B Class)",
-            "2009 Mercedes-Benz SL 65 AMG Black Series (A Class)",
-            "2013 Mercedes-Benz A 45 AMG (B Class)",
-            "2014 Mercedes-Benz Unimog U5023 (D Class)",
-            "2018 Mercedes-Benz X-Class (D Class)",
-            "1971 Meyers Manx (D Class)",
-            "2023 Meyers Manx 2.0 (B Class)",
-            "1992 Mitsubishi Galant VR-4 (C Class)",
-            "1995 Mitsubishi Eclipse GSX (C Class)",
-            "1995 Mitsubishi Montero Exceed 2800 TD (D Class)",
-            "1997 Mitsubishi GTO (C Class)",
-            "2004 Mitsubishi Lancer Evolution VIII MR (B Class)",
-            "2008 Mitsubishi Lancer Evolution X GSR (B Class)",
-            "1969 Nissan Fairlady Z 432 (D Class)",
-            "1973 Nissan Skyline H/T 2000GT-R (C Class)",
-            "1989 Nissan S-Cargo (D Class)",
-            "1990 Nissan Pulsar GTI-R (C Class)",
-            "1992 Nissan Skyline GT-R (B Class)",
-            "1994 Nissan Silvia K's (C Class)",
-            "1995 Nissan Gloria Gran Turismo (C Class)",
-            "1995 Nissan NISMO GT-R LM (B Class)",
-            "1997 Nissan Stagea RS Four V (C Class)",
-            "1998 Nissan Silvia K's Aero (C Class)",
-            "2000 Nissan Skyline GT-R V Spec II (B Class)",
-            "2002 Nissan Silvia Spec-R (B Class)",
-            "2003 Nissan Fairlady Z (B Class)",
-            "2012 Nissan GT-R Black Edition (R35) (S1 Class)",
-            "2017 Nissan GT-R (R35) (S1 Class)",
-            "2019 Nissan 370Z Nismo (A Class)",
-            "2020 Nissan GT-R NISMO (R35) (S1 Class)",
-            "2024 Nissan Z NISMO (A Class)",
-            "2010 Noble M600 (S1 Class)",
-            "2009 Pagani Zonda R (R Class)",
-            "2016 Pagani Huayra BC Coupe (S2 Class)",
-            "1962 Peel P50 (D Class)",
-            "2011 Penhall The Cholla (B Class)",
-            "1991 Peugeot 205 Rallye (D Class)",
-            "1958 Plymouth Fury (D Class)",
-            "1968 Plymouth Barracuda Formula S (C Class)",
-            "1971 Plymouth Cuda 426 HEMI (C Class)",
-            "2021 Polaris RZR Pro XP Factory Racing Limited Edition (C Class)",
-            "1977 Pontiac Firebird Trans Am (D Class)",
-            "1987 Pontiac Firebird Trans Am GTA (D Class)",
-            "1973 Porsche 911 Carrera RS (C Class)",
-            "1985 Porsche #185 959 Prodrive Rally Raid (A Class)",
-            "1989 Porsche 944 Turbo (B Class)",
-            "1993 Porsche 928 GTS (B Class)",
-            "1993 Porsche 968 Turbo S (B Class)",
-            "1997 Porsche 911 GT1 Strassenversion (S1 Class)",
-            "2004 Porsche 911 GT3 (A Class)",
-            "2005 Porsche Cayman GT3 WTAC (S2 Class)",
-            "2018 Porsche 718 Cayman GTS (A Class)",
-            "2018 Porsche 911 GT2 RS (S2 Class)",
-            "2018 Porsche Cayenne Turbo (A Class)",
-            "2018 Porsche Macan LPR Rally Raid (B Class)",
-            "2019 Porsche #70 Porsche Motorsport 935 (S2 Class)",
-            "2019 Porsche 911 Carrera S (S1 Class)",
-            "2020 Porsche Taycan Turbo S (S1 Class)",
-            "2021 Porsche 911 GT3 (S1 Class)",
-            "2021 Porsche Mission R (S2 Class)",
-            "2023 Porsche 911 GT3 RS (S1 Class)",
-            "2023 Porsche 911 Turbo S (S1 Class)",
-            "2015 Radical RXC Turbo (S2 Class)",
-            "1972 Reliant Supervan III (D Class)",
-            "1980 Renault 5 Turbo (C Class)",
-            "1993 Renault Clio Williams (D Class)",
-            "2008 Renault Mégane R26.R (B Class)",
-            "2010 Renault Megane RS 250 (B Class)",
-            "2018 Renault Megane R.S. (B Class)",
-            "2022 Rivian R1T (A Class)",
-            "2020 SIERRA Cars #23 Yokohama ALPHA (R Class)",
-            "2021 SIERRA Cars 700R (D Class)",
-            "2021 SIERRA Cars RX3 (A Class)",
-            "1965 Shelby Cobra Daytona Coupe (B Class)",
-            "1980 Subaru BRAT GL (D Class)",
-            "1990 Subaru LEGACY RS (C Class)",
-            "1994 Subaru Vivio RX-R (D Class)",
-            "1996 Subaru SVX (C Class)",
-            "1998 Subaru Impreza 22B-STi Version (B Class)",
-            "2004 Subaru IMPREZA WRX STI (B Class)",
-            "2005 Subaru IMPREZA WRX STI (B Class)",
-            "2005 Subaru LEGACY B4 2.0 GT (B Class)",
-            "2008 Subaru IMPREZA WRX STI (B Class)",
-            "2011 Subaru WRX STI (B Class)",
-            "2013 Subaru BRZ (C Class)",
-            "2015 Subaru WRX STI (B Class)",
-            "2022 Subaru BRZ (B Class)",
-            "2022 Subaru WRX (B Class)",
-            "2005 TVR Sagaris (A Class)",
-            "1979 Toyota FJ40 (D Class)",
-            "1985 Toyota Sprinter Trueno GT Apex (D Class)",
-            "1991 Toyota Chaser GT Twin Turbo (C Class)",
-            "1991 Toyota Sera (D Class)",
-            "1992 Toyota Supra 2.0 GT (C Class)",
-            "1993 Toyota #1 T100 Baja Truck (B Class)",
-            "1994 Toyota Celica GT-Four ST205 (C Class)",
-            "1995 Toyota MR2 GT (B Class)",
-            "2003 Toyota Celica Sport Specialty II (C Class)",
-            "2005 Toyota Crown Super Deluxe Taxi (D Class)",
-            "2013 Toyota 86 (C Class)",
-            "2017 Toyota JPN Taxi (D Class)",
-            "2019 Toyota 4Runner TRD Pro (C Class)",
-            "2019 Toyota Tacoma TRD Pro (C Class)",
-            "2021 Toyota GR Yaris (B Class)",
-            "2022 Toyota GR86 (B Class)",
-            "2025 Toyota Land Cruiser (C Class)",
-            "2015 Ultima Evolution Coupe 1020 (R Class)",
-            "1963 Volkswagen Beetle (D Class)",
-            "1969 Volkswagen Class 5/1600 Baja Bug (D Class)",
-            "1982 Volkswagen Pickup LX (D Class)",
-            "1983 Volkswagen Golf GTI (D Class)",
-            "1992 Volkswagen Golf Gti 16v Mk2 (D Class)",
-            "1995 Volkswagen Corrado VR6 (C Class)",
-            "2010 Volkswagen Golf R (B Class)",
-            "2011 Volkswagen Scirocco R (B Class)",
-            "2014 Volkswagen Golf R (B Class)",
-            "2017 Volkswagen #34 Andretti Rally Cross Beetle (S1 Class)",
-            "2021 Volkswagen Golf R (B Class)",
-            "2022 Volkswagen Golf R (B Class)",
-            "1983 Volvo 242 Turbo Evolution (C Class)",
-            "2013 Wuling Sunshine S (D Class)",
-            "2022 Wuling Hongguang Mini EV (D Class)",
-            "2019 Zenvo TSR-S (R Class)",
-            "2016 Aston Martin Vulcan (S2 Class)",
-            "2024 Chevrolet Corvette E-Ray (S1 Class)",
-            "2014 Lamborghini Huracán LP 610-4 (S1 Class)",
-            "2016 Lamborghini Centenario LP 770-4 (S1 Class)",
-            "2013 SRT Viper GTS (S1 Class)",
+            "1973 Mazda RX-3 Forza Edition",
+            "1994 Mazda MX-5 Miata Forza Edition",
+            "2022 Subaru BRZ Forza Edition",
+            "1992 Alfa Romeo 155 Q4",
+            "2014 Alfa Romeo 4C",
+            "1964 Aston Martin DB5",
+            "2019 Aston Martin Vantage",
+            "1987 Buick Regal GNX",
+            "1999 Dodge Viper GTS ACR",
+            "2002 Ferrari Enzo Ferrari",
+            "1965 Ford Mustang GT Coupe",
+            "2009 Ford Focus RS",
+            "1970 GMC Jimmy",
+            "1986 Honda Civic Si",
+            "2016 Koenigsegg Regera",
+            "2020 Land Rover Defender 110 X",
+            "2010 Lexus LFA",
+            "2016 Mazda MX-5",
+            "2018 McLaren 600LT Coupé",
+            "1990 Mercedes-Benz 190 E 2.5-16 Evolution II",
+            "2012 Mercedes-Benz C 63 AMG Coupé Black Series",
+            "2001 Mitsubishi Lancer Evolution VI GSR TM Edition",
+            "1987 Nissan Skyline GTS-R",
+            "1989 Nissan Silvia K's",
+            "1994 Nissan Fairlady Z Version S Twin Turbo",
+            "2010 Pagani Zonda Cinque Roadster",
+            "2024 Ram 1500 TRX",
+            "2018 TVR Griffith",
+            "1992 Toyota Celica GT-Four RC ST185",
+            "2023 Toyota Camry TRD",
+            "2554 AMG Transport Dynamics M12S Warthog CST",
+            "1962 Ferrari 250 GT Berlinetta Lusso",
+            "1987 Ferrari F40",
+            "2017 Ford #14 Rahal Letterman Lanigan Racing Fiesta",
+            "2017 Ford #25 'Brocky' Ultra4 Bronco RTR",
+            "2017 Ford Focus RS",
+            "2024 Ford Mustang Dark Horse",
+            "1997 Formula Drift #777 Nissan 240SX",
+            "2007 Formula Drift #117 599 GTB Fiorano",
+            "2009 Formula Drift #99 Mazda RX-8",
+            "2020 Gordon Murray Automotive T.50",
+            "2005 Honda NSX-R",
+            "1991 Jaguar Sport XJR-15",
+            "2017 Koenigsegg Agera RS",
+            "2019 Lamborghini Urus",
+            "2024 Lamborghini Revuelto",
+            "2015 Land Rover Range Rover Sport SVR",
+            "1997 Maserati Ghibli Cup",
+            "1992 Mazda RX-7 Type R",
+            "2017 Mazda MX-5 Cup",
+            "2013 Mercedes-Benz G 65 AMG",
+            "2024 Nissan GT-R Nismo",
+            "1984 Opel Manta 400",
+            "2021 Polaris RZR Pro XP Ultimate",
+            "1970 Porsche #3 917 LH",
+            "2012 Porsche 911 GT3 RS 4.0",
+            "2014 Porsche 918 Spyder",
+            "2022 Porsche 718 Cayman GT4 RS",
+            "2016 RJ Anderson #37 Polaris RZR Pro 2 Truck",
+            "1997 Toyota Chaser 2.5 Tourer V",
+            "1963 Volkswagen Type 2 De Luxe",
+            "2016 Ariel Nomad",
+            "2022 Aston Martin Valkyrie AMR Pro",
+            "2019 BMW Z4 Roadster",
+            "2021 Bentley Continental GT Convertible",
+            "1969 Dodge Charger Daytona HEMI",
+            "2018 Dodge Challenger SRT Demon",
+            "1984 Honda City E II",
+            "1991 Honda Beat",
+            "1994 Honda Acty",
+            "1994 Honda Prelude Si",
+            "2023 Honda Civic Type R",
+            "1986 MG Metro 6R4",
+            "1997 Toyota Soarer 2.5 GT-T",
+            "1998 Toyota Supra RZ",
+            "2020 Toyota GR Supra",
+            "1968 Abarth 595 esseesse",
+            "1980 Abarth Fiat 131",
+            "2001 Acura Integra Type R",
+            "2002 Acura RSX Type S",
+            "2023 Acura Integra A-Spec",
+            "1965 Alfa Romeo Giulia Sprint GTA Stradale",
+            "1968 Alfa Romeo 33 Stradale",
+            "2007 Alfa Romeo 8C Competizione",
+            "2017 Alfa Romeo Giulia Quadrifoglio",
+            "2015 Alumicraft Class 10 Race Car",
+            "2021 Alumicraft #122 Class 1 Buggy",
+            "2022 Alumicraft #6165 Trick Truck",
+            "2013 Ariel Atom 500 V8",
+            "2017 Aston Martin DB11",
+            "2017 Aston Martin Vulcan AMR Pro",
+            "2023 Aston Martin Valkyrie",
+            "1986 Audi #2 Audi Sport quattro S1",
+            "2001 Audi RS 4 Avant",
+            "2003 Audi RS 6",
+            "2006 Audi RS 4",
+            "2009 Audi R8 LMS",
+            "2009 Audi RS 6",
+            "2010 Audi TT RS Coupé",
+            "2011 Audi RS 3 Sportback",
+            "2011 Audi RS 5 Coupé",
+            "2013 Audi RS 4 Avant",
+            "2013 Audi RS 7 Sportback",
+            "2015 Audi RS 6 Avant",
+            "2015 Audi S1",
+            "2016 Audi R8 V10 plus",
+            "2018 Audi RS 4 Avant",
+            "2020 Audi R8 V10 performance",
+            "2020 Audi RS 3 Sedan",
+            "2021 Audi RS 6 Avant",
+            "2021 Audi RS 7 Sportback",
+            "2021 Audi RS e-tron GT",
+            "1965 Austin-Healey 3000 MkIII",
+            "1993 Autozam AZ-1",
+            "2014 BAC Mono",
+            "1957 BMW Isetta 300 Export",
+            "1973 BMW 2002 Turbo",
+            "1988 BMW M3",
+            "1988 BMW M5",
+            "1995 BMW 850CSi",
+            "1995 BMW M5",
+            "1997 BMW M3",
+            "2003 BMW M5",
+            "2005 BMW M3",
+            "2008 BMW M3",
+            "2008 BMW Z4 M Coupé",
+            "2009 BMW M5",
+            "2010 BMW M3 GTS",
+            "2011 BMW X5 M",
+            "2012 BMW M5",
+            "2014 BMW M4 Coupé",
+            "2015 BMW i8",
+            "2016 BMW M4 GTS",
+            "2020 BMW M8 Competition Coupé",
+            "2021 BMW M4 Competition Coupé",
+            "2022 BMW M5 CS",
+            "2022 BMW iX xDrive50",
+            "2023 BMW M2",
+            "2024 BMW X6 M Competition",
+            "2013 Cadillac XTS Limousine",
+            "2016 Cadillac ATS-V",
+            "2016 Cadillac CTS-V Sedan",
+            "2022 Cadillac CT4-V Blackwing",
+            "2022 Cadillac CT5-V Blackwing",
+            "2018 Can-Am Maverick X RS Turbo R",
+            "1953 Chevrolet Corvette",
+            "1955 Chevrolet 150 Utility Sedan",
+            "1957 Chevrolet Bel Air",
+            "1964 Chevrolet Impala Super Sport 409",
+            "1969 Chevrolet Camaro Super Sport Coupe",
+            "1969 Chevrolet Nova Super Sport 396",
+            "1970 Chevrolet Camaro Z28",
+            "1970 Chevrolet Chevelle Super Sport 454",
+            "1970 Chevrolet Corvette ZR-1",
+            "1970 Chevrolet El Camino Super Sport 454",
+            "1972 Chevrolet K-10 Custom",
+            "1979 Chevrolet Camaro Z28",
+            "1988 Chevrolet Monte Carlo Super Sport",
+            "1995 Chevrolet Corvette ZR-1",
+            "1996 Chevrolet Impala Super Sport",
+            "2002 Chevrolet Corvette Z06",
+            "2009 Chevrolet Corvette ZR1",
+            "2015 Chevrolet Camaro Z/28",
+            "2015 Chevrolet Corvette Z06",
+            "2017 Chevrolet Camaro ZL1",
+            "2018 Chevrolet Camaro ZL1 1LE",
+            "2020 Chevrolet Corvette Stingray Coupe",
+            "2020 Chevrolet Silverado LT Trail Boss",
+            "2023 Chevrolet Corvette Z06",
+            "1970 Datsun 510",
+            "2013 DeBerti Jeep Wrangler Unlimited",
+            "2018 DeBerti Chevrolet Silverado 1500 Drift Truck",
+            "2019 DeBerti Ford Super Duty F-250 Lariat 'Transformer'",
+            "2019 DeBerti Toyota Tacoma TRD ‘The Performance Truck’",
+            "1982 DeLorean DMC-12",
+            "1970 Dodge Coronet Super Bee",
+            "2008 Dodge Viper SRT-10 ACR",
+            "2015 Dodge Challenger SRT Hellcat",
+            "2015 Dodge Charger SRT Hellcat",
+            "2022 Dodge Challenger SRT Super Stock",
+            "1962 Ferrari 250 GTO",
+            "1967 Ferrari #24 Ferrari Spa 330 P4",
+            "1969 Ferrari Dino 246 GT",
+            "1970 Ferrari 512 S",
+            "1989 Ferrari F40 Competizione",
+            "1995 Ferrari F50",
+            "2005 Ferrari FXX",
+            "2007 Ferrari 430 Scuderia",
+            "2009 Ferrari 458 Italia",
+            "2010 Ferrari 599XX",
+            "2013 Ferrari 458 Speciale",
+            "2013 Ferrari LaFerrari",
+            "2014 Ferrari FXX K",
+            "2015 Ferrari 488 GTB",
+            "2015 Ferrari F12tdf",
+            "2017 Ferrari 812 Superfast",
+            "2017 Ferrari J50",
+            "2018 Ferrari FXX-K Evo",
+            "2018 Ferrari Portofino",
+            "2019 Ferrari 488 Pista",
+            "2019 Ferrari Monza SP2",
+            "2020 Ferrari SF90 Stradale",
+            "1932 Ford De Luxe Five-Window Coupe",
+            "1966 Ford #2 GT40 Mk II",
+            "1968 Ford Mustang GT 2+2 Fastback",
+            "1969 Ford Mustang Boss 302",
+            "1973 Ford Capri RS3100",
+            "1973 Ford XB Falcon GT",
+            "1977 Ford #5 Escort RS1800 MkII",
+            "1986 Ford F-150 XLT Lariat",
+            "1992 Ford Escort RS Cosworth",
+            "1993 Ford Mustang SVT Cobra R",
+            "1994 Ford Supervan 3",
+            "1999 Ford Racing Puma",
+            "2000 Ford Mustang SVT Cobra R",
+            "2001 Ford #4 Ford Focus RS",
+            "2003 Ford Focus RS",
+            "2010 Ford Crown Victoria Police Interceptor",
+            "2011 Ford Transit SuperSportVan",
+            "2013 Ford Mustang Shelby GT500",
+            "2014 Ford #11 Rockstar F-150 Trophy Truck",
+            "2014 Ford FPV Limited Edition Pursuit Ute",
+            "2016 Ford Mustang Shelby GT350R",
+            "2017 Ford GT",
+            "2018 Ford Mustang RTR Spec 5",
+            "2020 Ford #2069 Ford Performance Bronco R",
+            "2020 Ford Mustang Shelby GT500",
+            "2020 Ford Super Duty F-450 DRW PLATINUM",
+            "2022 Ford Bronco Raptor",
+            "2022 Ford Focus ST",
+            "2023 Ford F-150 Raptor R",
+            "2023 Ford Fiesta ST",
+            "2024 Ford Mustang GT",
+            "1989 Formula Drift #98 BMW 325i",
+            "1995 Formula Drift #34 Toyota Supra MkIV",
+            "2013 Formula Drift #777 Chevrolet Corvette",
+            "2016 Formula Drift #530 HSV Maloo GEN-F",
+            "2019 Formula Drift #411 Toyota Corolla Hatchback",
+            "2020 Formula Drift #151 Toyota GR Supra",
+            "2020 Formula Drift #91 BMW M2",
+            "2023 Formula Drift #64 Forsberg Racing Nissan Z",
+            "1991 GMC Syclone",
+            "1992 GMC Typhoon",
+            "2022 GMC HUMMER EV Pickup",
+            "2025 GR GT Prototype",
+            "2014 HSV GEN-F GTS",
+            "2014 HSV Limited Edition GEN-F GTS Maloo",
+            "2019 Hennessey Ford F-150 VelociRaptor 6X6",
+            "2021 Hennessey Venom F5",
+            "1977 Holden Torana A9X",
+            "1970 Honda S800",
+            "1992 Honda NSX-R",
+            "1997 Honda Civic Type R",
+            "2003 Honda S2000",
+            "2004 Honda Civic Type R",
+            "2007 Honda Civic Type R",
+            "2015 Honda Civic Type R",
+            "2015 Honda Ridgeline Baja Trophy Truck",
+            "2018 Honda Civic Type R",
+            "2022 Honda e",
+            "2019 Hyundai Veloster N",
+            "2020 Hyundai i30 N",
+            "2021 Hyundai i20 N",
+            "2022 Hyundai N Vision 74",
+            "2023 Hyundai IONIQ 5 N",
+            "1956 Jaguar D-Type",
+            "1964 Jaguar Lightweight E-Type",
+            "1993 Jaguar XJ220",
+            "1993 Jaguar XJ220S TWR",
+            "2010 Jaguar C-X75",
+            "2012 Jeep Wrangler Rubicon",
+            "2016 Jeep Trailcat",
+            "2018 Jeep Grand Cherokee Trackhawk",
+            "2020 Jeep JT",
+            "2019 Jimco #240 Fastball Racing Class 6100 Spec Trophy Truck",
+            "2020 Jimco #179 Hammerhead Class 1",
+            "2018 KTM X-Bow GT4",
+            "2008 Koenigsegg CCGT",
+            "2011 Koenigsegg Agera",
+            "2020 Koenigsegg Jesko",
+            "1967 Lamborghini Miura P400",
+            "2010 Lamborghini Murciélago LP 670-4 SV",
+            "2012 Lamborghini Gallardo LP570-4 Spyder Performante",
+            "2013 Lamborghini Veneno",
+            "2018 Lamborghini Aventador SVJ",
+            "2020 Lamborghini Essenza SCV12",
+            "2020 Lamborghini Huracán STO",
+            "2020 Lamborghini Sián Roadster",
+            "2021 Lamborghini Countach LPI 800-4",
+            "2022 Lamborghini Huracán Tecnica",
+            "1986 Lancia Delta S4",
+            "1992 Lancia Delta HF Integrale EVO",
+            "2015 Lexus RC F",
+            "2021 Lexus LC 500",
+            "1997 Lotus Elise GT1",
+            "1999 Lotus Elise Series 1 Sport 190",
+            "2020 Lotus Evija",
+            "2024 Lucid Air Sapphire",
+            "1965 MINI Cooper S",
+            "2012 MINI John Cooper Works GP",
+            "2013 MINI X-Raid All4 Racing Countryman",
+            "2008 Maserati MC12 Versione Corsa",
+            "2022 Maserati MC20",
+            "1973 Mazda RX-3",
+            "1990 Mazda Savanna RX-7",
+            "1994 Mazda MX-5 Miata",
+            "2005 Mazda Mazdaspeed MX-5",
+            "2010 Mazda Mazdaspeed 3",
+            "2011 Mazda RX-8 R3",
+            "2013 Mazda MX-5",
+            "2022 Mazda MX-5 Miata RF",
+            "1993 McLaren F1",
+            "1997 McLaren F1 GT",
+            "2011 McLaren 12C Coupé",
+            "2013 McLaren P1",
+            "2014 McLaren 650S Spider",
+            "2015 McLaren 570S Coupé",
+            "2019 McLaren Speedtail",
+            "2021 McLaren 765LT Coupé",
+            "2023 McLaren Artura",
+            "2015 Mercedes-AMG GT S",
+            "2016 Mercedes-AMG C 63 S Coupé",
+            "2018 Mercedes-AMG E 63 S",
+            "2020 Mercedes-AMG GT Black Series",
+            "2020 Mercedes-AMG SLC 43 Final Edition",
+            "2021 Mercedes-AMG Mercedes-AMG ONE",
+            "2021 Mercedes-AMG SL 63",
+            "1954 Mercedes-Benz 300 SL Coupé",
+            "1955 Mercedes-Benz 300 SLR",
+            "1987 Mercedes-Benz AMG Hammer Coupe",
+            "2009 Mercedes-Benz SL 65 AMG Black Series",
+            "2013 Mercedes-Benz A 45 AMG",
+            "2014 Mercedes-Benz Unimog U5023",
+            "2018 Mercedes-Benz X-Class",
+            "1971 Meyers Manx",
+            "2023 Meyers Manx 2.0",
+            "1992 Mitsubishi Galant VR-4",
+            "1995 Mitsubishi Eclipse GSX",
+            "1995 Mitsubishi Montero Exceed 2800 TD",
+            "1997 Mitsubishi GTO",
+            "2004 Mitsubishi Lancer Evolution VIII MR",
+            "2008 Mitsubishi Lancer Evolution X GSR",
+            "1969 Nissan Fairlady Z 432",
+            "1973 Nissan Skyline H/T 2000GT-R",
+            "1989 Nissan S-Cargo",
+            "1990 Nissan Pulsar GTI-R",
+            "1992 Nissan Skyline GT-R",
+            "1994 Nissan Silvia K's",
+            "1995 Nissan Gloria Gran Turismo",
+            "1995 Nissan NISMO GT-R LM",
+            "1997 Nissan Stagea RS Four V",
+            "1998 Nissan Silvia K's Aero",
+            "2000 Nissan Skyline GT-R V Spec II",
+            "2002 Nissan Silvia Spec-R",
+            "2003 Nissan Fairlady Z",
+            "2012 Nissan GT-R Black Edition (R35)",
+            "2017 Nissan GT-R (R35)",
+            "2019 Nissan 370Z Nismo",
+            "2020 Nissan GT-R NISMO (R35)",
+            "2024 Nissan Z NISMO",
+            "2010 Noble M600",
+            "2009 Pagani Zonda R",
+            "2016 Pagani Huayra BC Coupe",
+            "1962 Peel P50",
+            "2011 Penhall The Cholla",
+            "1991 Peugeot 205 Rallye",
+            "1958 Plymouth Fury",
+            "1968 Plymouth Barracuda Formula S",
+            "1971 Plymouth Cuda 426 HEMI",
+            "2021 Polaris RZR Pro XP Factory Racing Limited Edition",
+            "1977 Pontiac Firebird Trans Am",
+            "1987 Pontiac Firebird Trans Am GTA",
+            "1973 Porsche 911 Carrera RS",
+            "1985 Porsche #185 959 Prodrive Rally Raid",
+            "1989 Porsche 944 Turbo",
+            "1993 Porsche 928 GTS",
+            "1993 Porsche 968 Turbo S",
+            "1997 Porsche 911 GT1 Strassenversion",
+            "2004 Porsche 911 GT3",
+            "2005 Porsche Cayman GT3 WTAC",
+            "2018 Porsche 718 Cayman GTS",
+            "2018 Porsche 911 GT2 RS",
+            "2018 Porsche Cayenne Turbo",
+            "2018 Porsche Macan LPR Rally Raid",
+            "2019 Porsche #70 Porsche Motorsport 935",
+            "2019 Porsche 911 Carrera S",
+            "2020 Porsche Taycan Turbo S",
+            "2021 Porsche 911 GT3",
+            "2021 Porsche Mission R",
+            "2023 Porsche 911 GT3 RS",
+            "2023 Porsche 911 Turbo S",
+            "2015 Radical RXC Turbo",
+            "1972 Reliant Supervan III",
+            "1980 Renault 5 Turbo",
+            "1993 Renault Clio Williams",
+            "2008 Renault Mégane R26.R",
+            "2010 Renault Megane RS 250",
+            "2018 Renault Megane R.S.",
+            "2022 Rivian R1T",
+            "2020 SIERRA Cars #23 Yokohama ALPHA",
+            "2021 SIERRA Cars 700R",
+            "2021 SIERRA Cars RX3",
+            "1965 Shelby Cobra Daytona Coupe",
+            "1980 Subaru BRAT GL",
+            "1990 Subaru LEGACY RS",
+            "1994 Subaru Vivio RX-R",
+            "1996 Subaru SVX",
+            "1998 Subaru Impreza 22B-STi Version",
+            "2004 Subaru IMPREZA WRX STI",
+            "2005 Subaru IMPREZA WRX STI",
+            "2005 Subaru LEGACY B4 2.0 GT",
+            "2008 Subaru IMPREZA WRX STI",
+            "2011 Subaru WRX STI",
+            "2013 Subaru BRZ",
+            "2015 Subaru WRX STI",
+            "2022 Subaru BRZ",
+            "2022 Subaru WRX",
+            "2005 TVR Sagaris",
+            "1979 Toyota FJ40",
+            "1985 Toyota Sprinter Trueno GT Apex",
+            "1991 Toyota Chaser GT Twin Turbo",
+            "1991 Toyota Sera",
+            "1992 Toyota Supra 2.0 GT",
+            "1993 Toyota #1 T100 Baja Truck",
+            "1994 Toyota Celica GT-Four ST205",
+            "1995 Toyota MR2 GT",
+            "2003 Toyota Celica Sport Specialty II",
+            "2005 Toyota Crown Super Deluxe Taxi",
+            "2013 Toyota 86",
+            "2017 Toyota JPN Taxi",
+            "2019 Toyota 4Runner TRD Pro",
+            "2019 Toyota Tacoma TRD Pro",
+            "2021 Toyota GR Yaris",
+            "2022 Toyota GR86",
+            "2025 Toyota Land Cruiser",
+            "2015 Ultima Evolution Coupe 1020",
+            "1963 Volkswagen Beetle",
+            "1969 Volkswagen Class 5/1600 Baja Bug",
+            "1982 Volkswagen Pickup LX",
+            "1983 Volkswagen Golf GTI",
+            "1992 Volkswagen Golf Gti 16v Mk2",
+            "1995 Volkswagen Corrado VR6",
+            "2010 Volkswagen Golf R",
+            "2011 Volkswagen Scirocco R",
+            "2014 Volkswagen Golf R",
+            "2017 Volkswagen #34 Andretti Rally Cross Beetle",
+            "2021 Volkswagen Golf R",
+            "2022 Volkswagen Golf R",
+            "1983 Volvo 242 Turbo Evolution",
+            "2013 Wuling Sunshine S",
+            "2022 Wuling Hongguang Mini EV",
+            "2019 Zenvo TSR-S",
+            "2016 Aston Martin Vulcan",
+            "2024 Chevrolet Corvette E-Ray",
+            "2014 Lamborghini Huracán LP 610-4",
+            "2016 Lamborghini Centenario LP 770-4",
+            "2013 SRT Viper GTS",
+            "1990 Jaguar XJ-S",
         ]
         
     @functools.cached_property
     def wristband_cars(self) -> List[str]:
         return [
-            "2023 Porsche 911 Rallye (A Class)",
-            "2020 BMW M2 Competition Coupé (A Class)",
-            "2022 Lamborghini Aventador LP 780-4 Ultimae (S1 Class)",
-            "2018 Subaru WRX STI ARX Supercar (S1 Class)",
-            "2022 Acura NSX Type S (S1 Class)",
-            "2007 Peugeot 207 Super 2000 (A Class)",
-            "1985 Ford RS200 Evolution (S1 Class)",
+            "2023 Porsche 911 Rallye",
+            "2020 BMW M2 Competition Coupé",
+            "2022 Lamborghini Aventador LP 780-4 Ultimae",
+            "2018 Subaru WRX STI ARX Supercar",
+            "2022 Acura NSX Type S",
+            "2007 Peugeot 207 Super 2000",
+            "1985 Ford RS200 Evolution",
         ]
         
     @functools.cached_property
     def collection_cars(self) -> List[str]:
         return [
-            "1981 BMW M1 (B Class)",
-            "1969 Dodge Charger R/T (C Class)",
-            "1987 Ford Sierra Cosworth RS500 (C Class)",
-            "2005 Ford GT (A Class)",
-            "2005 Honda NSX-R GT (A Class)",
-            "1997 Lamborghini Diablo SV (A Class)",
-            "1974 Lancia Stratos HF Stradale (C Class)",
-            "1962 Lincoln Continental (D Class)",
-            "1985 Mazda RX-7 GSL-SE (D Class)",
-            "1991 Mazda #55 Mazda 787B (R Class)",
-            "1995 Mitsubishi Lancer Evolution III GSR (B Class)",
-            "1997 Mitsubishi Montero Evolution (D Class)",
-            "2005 Mitsubishi #1 Sierra Sierra Enterprises Lancer Evolution Time Attack (R Class)",
-            "1971 Nissan Skyline 2000GT-R (D Class)",
-            "1983 Nissan #11 Tomica Skyline Turbo Super Silhouette (S2 Class)",
-            "1985 Nissan Safari Turbo (D Class)",
-            "1989 Nissan PAO (D Class)",
-            "1991 Nissan Figaro (D Class)",
-            "1998 Nissan #23 Pennzoil NISMO Skyline GT-R (S2 Class)",
-            "1998 Nissan R390 (GT1) (S1 Class)",
-            "1984 Peugeot 205 Turbo 16 (C Class)",
-            "1982 Porsche 911 Turbo 3.3 (B Class)",
-            "1987 Porsche 959 (A Class)",
-            "1969 Toyota 2000GT (D Class)",
-            "1965 Alfa Romeo Giulia TZ2 (B Class)",
-            "2013 Audi R8 Coupé V10 plus 5.2 FSI quattro (A Class)",
-            "2023 BMW M2 Forza Edition (A Class)",
-            "1967 Chevrolet Corvette Stingray 427 (B Class)",
-            "2021 Dodge Durango SRT Hellcat (A Class)",
-            "1996 Ferrari F50 GT (R Class)",
-            "2022 Ford Supervan 4 (R Class)",
-            "2018 Funco Motorsports F9 (S1 Class)",
-            "1974 Honda Civic RS (D Class)",
-            "1984 Honda Civic CRX Mugen (D Class)",
-            "2022 Lamborghini Huracán Sterrato (S1 Class)",
-            "2010 Lexus LFA Forza Edition (S2 Class)",
-            "2018 Lotus Scura Motorsports Exige WTAC (R Class)",
-            "2018 MINI X-raid John Cooper Works Buggy (B Class)",
-            "2003 Porsche Carrera GT (S1 Class)",
-            "1965 Shelby Cobra 427 S/C (B Class)",
-            "1994 Subaru Vivio RX-R Forza Edition (S2 Class)",
-            "1985 Toyota Sprinter Trueno GT Apex Forza Edition (B Class)",
-            "2013 Toyota 86 Stories (A Class)",
-            "1965 Toyota Sports 800 (D Class)",
+            "1981 BMW M1",
+            "1969 Dodge Charger R/T",
+            "1987 Ford Sierra Cosworth RS500",
+            "2005 Ford GT",
+            "2005 Honda NSX-R GT",
+            "1997 Lamborghini Diablo SV",
+            "1974 Lancia Stratos HF Stradale",
+            "1962 Lincoln Continental",
+            "1985 Mazda RX-7 GSL-SE",
+            "1991 Mazda #55 Mazda 787B",
+            "1995 Mitsubishi Lancer Evolution III GSR",
+            "1997 Mitsubishi Montero Evolution",
+            "2005 Mitsubishi #1 Sierra Sierra Enterprises Lancer Evolution Time Attack",
+            "1971 Nissan Skyline 2000GT-R",
+            "1983 Nissan #11 Tomica Skyline Turbo Super Silhouette",
+            "1985 Nissan Safari Turbo",
+            "1989 Nissan PAO",
+            "1991 Nissan Figaro",
+            "1998 Nissan #23 Pennzoil NISMO Skyline GT-R",
+            "1998 Nissan R390 (GT1)",
+            "1984 Peugeot 205 Turbo 16",
+            "1982 Porsche 911 Turbo 3.3",
+            "1987 Porsche 959",
+            "1969 Toyota 2000GT",
+            "1965 Alfa Romeo Giulia TZ2",
+            "2013 Audi R8 Coupé V10 plus 5.2 FSI quattro",
+            "2023 BMW M2 Forza Edition",
+            "1967 Chevrolet Corvette Stingray 427",
+            "2021 Dodge Durango SRT Hellcat",
+            "1996 Ferrari F50 GT",
+            "2022 Ford Supervan 4",
+            "2018 Funco Motorsports F9",
+            "1974 Honda Civic RS",
+            "1984 Honda Civic CRX Mugen",
+            "2022 Lamborghini Huracán Sterrato",
+            "2010 Lexus LFA Forza Edition",
+            "2018 Lotus Scura Motorsports Exige WTAC",
+            "2018 MINI X-raid John Cooper Works Buggy",
+            "2003 Porsche Carrera GT",
+            "1965 Shelby Cobra 427 S/C",
+            "1994 Subaru Vivio RX-R Forza Edition",
+            "1985 Toyota Sprinter Trueno GT Apex Forza Edition",
+            "2013 Toyota 86 Stories",
+            "1965 Toyota Sports 800",
+            "1990 Jaguar XJ-S Forza Edition",
         ]
     
     @functools.cached_property
     def playlist_history_cars(self) -> List[str]:
         return [
-            "1972 Mazda Cosmo 110S Series II (D Class)",
+            "1972 Mazda Cosmo 110S Series II",
         ]
     
     @functools.cached_property
     def playlist_welcome_to_japan_cars(self) -> List[str]:
         return [
             # Series
-            "2008 Mazda Furai (R Class)",
-            "2010 Nissan 370Z (B Class)",
+            "2008 Mazda Furai",
+            "2010 Nissan 370Z",
             
             # Summer
-            "1999 Toyota Altezza RS200 Z EDITION (C Class)",
-            "2006 Mitsubishi Lancer Evolution IX MR (B Class)",
+            "1999 Toyota Altezza RS200 Z EDITION",
+            "2006 Mitsubishi Lancer Evolution IX MR",
             
             # Autumn
-            "1997 Nissan Skyline GT-R V-Spec (B Class)",
-            "1991 Honda CR-X SiR (C Class)",
+            "1997 Nissan Skyline GT-R V-Spec",
+            "1991 Honda CR-X SiR",
             
             # Winter
-            "2019 Subaru STI S209 (B Class)",
-            "2016 Toyota Land Cruiser Arctic Trucks AT37 (D Class)",
+            "2019 Subaru STI S209",
+            "2016 Toyota Land Cruiser Arctic Trucks AT37",
             
             # Spring
-            "1996 Toyota Starlet Glanza V (C Class)",
-            "1974 Toyota Corolla SR5 (D Class)",
+            "1996 Toyota Starlet Glanza V",
+            "1974 Toyota Corolla SR5",
             
             # Exclusive Reward
-            "1989 Toyota MR2 SC (D Class)",
-            "2021 Pagani Huayra R (R Class)",
-            "2021 McLaren Sabre (S1 Class)",
-            "2022 Ferrari 296 GTB (S2 Class)",
-            "2016 Abarth 695 Biposto (B Class)",
-            "1993 Schuppan 962CR (S1 Class)",
-            "2021 Aston Martin DBX (A Class)",
-            "1987 Nissan Be-1 (D Class)",
-            "2020 Lamborghini Huracán EVO (S1 Class)",
-            "2023 Lotus Emira (A Class)",
-            "1969 Datsun 2000 Roadster (D Class)",
-            "2020 Ferrari Roma (S1 Class)",
-            "1967 Renault 8 Gordini (D Class)",
-            "1988 Lamborghini Countach LP5000 QV (A Class)",
-            "2004 Maserati MC12 (S1 Class)",
-            "1994 Ferrari F355 Berlinetta (B Class)",
-            "2017 Saleen S7 LM (S2 Class)",
         ]
     
     @functools.cached_property
     def playlist_horizon_decades_cars(self) -> List[str]:
         return [
             # Series
-            "1993 Porsche 911 Turbo S Leichtbau (A Class)",
-            "2018 Lotus Exige Cup 430 (S1 Class)",
+            "1993 Porsche 911 Turbo S Leichtbau",
+            "2018 Lotus Exige Cup 430",
             
             # Summer
-            "1989 Volkswagen Rallye Golf (C Class)",
-            "1988 Lamborghini Countach LP5000 QV (A Class)",
+            "1989 Volkswagen Rallye Golf",
+            "1988 Lamborghini Countach LP5000 QV",
             
             # Autumn
-            "1998 TVR Cerbera Speed 12 (S1 Class)",
-            "1993 Schuppan 962CR (S1 Class)",
+            "1998 TVR Cerbera Speed 12",
+            "1993 Schuppan 962CR",
             
             # Winter
-            "2006 Dodge Ram SRT-10 (B Class)",
-            "2003 Ford F-150 SVT Lightning (C Class)",
+            "2006 Dodge Ram SRT-10",
+            "2003 Ford F-150 SVT Lightning",
             
             # Spring
-            "2017 Mercedes-AMG GT R (S1 Class)",
-            "2017 Saleen S7 LM (S2 Class)",
+            "2017 Mercedes-AMG GT R",
+            "2017 Saleen S7 LM",
             
             # Exclusive Reward
-            "1999 Lamborghini Diablo GTR (S2 Class)",
         ]
     
     @functools.cached_property
     def playlist_italian_exotics_cars(self) -> List[str]:
         return [
             # Series
-            "2024 Lamborghini Temerario (S2 Class)",
-            "2022 Ferrari 296 GTB (S2 Class)",
+            "2024 Lamborghini Temerario",
+            "2022 Ferrari 296 GTB",
             
             # Summer
-            "1984 De Tomaso Pantera GT5 (B Class)",
-            "2004 Maserati MC12 (S1 Class)",
+            "1984 De Tomaso Pantera GT5",
+            "2004 Maserati MC12",
             
             # Autumn
-            "2017 Abarth 124 Spider (C Class)",
-            "2020 Lamborghini Huracán EVO (S1 Class)",
+            "2017 Abarth 124 Spider",
+            "2020 Lamborghini Huracán EVO",
             
             # Winter
-            "1982 Lancia 037 Stradale (B Class)",
-            "2020 Ferrari Roma (S1 Class)",
+            "1982 Lancia 037 Stradale",
+            "2020 Ferrari Roma",
             
             # Spring
-            "2022 Lamborghini Huracán EVO Spyder (S1 Class)",
-            "2021 Pagani Huayra R (R Class)",
+            "2022 Lamborghini Huracán EVO Spyder",
+            "2021 Pagani Huayra R",
             
             # Exclusive Reward
         ]
@@ -2111,24 +2371,50 @@ class ForzaHorizon6Game(Game):
     def playlist_horizon_mascot_party_cars(self) -> List[str]:
         return [
             # Series
-            "1970 Honda N600 (D Class)",
-            "1967 Renault 8 Gordini (D Class)",
+            "1970 Honda N600",
+            "1967 Renault 8 Gordini",
             
             # Summer
-            "2018 Exomotive V8 XP-5 (S2 Class)",
-            "1969 Datsun 2000 Roadster (D Class)",
+            "2018 Exomotive V8 XP-5",
+            "1969 Datsun 2000 Roadster",
             
             # Autumn
-            "2024 Chevrolet Camaro ZL1 (S1 Class)",
-            "2016 Abarth 695 Biposto (B Class)",
+            "2024 Chevrolet Camaro ZL1",
+            "2016 Abarth 695 Biposto",
             
             # Winter
-            "1974 Toyota Celica GT (D Class)",
-            "1989 Toyota MR2 SC (D Class)",
+            "1974 Toyota Celica GT",
+            "1989 Toyota MR2 SC",
             
             # Spring
-            "1988 Mitsubishi Starion ESI-R (C Class)",
-            "1968 Dodge Dart HEMI Super Stock (B Class)",
+            "1988 Mitsubishi Starion ESI-R",
+            "1968 Dodge Dart HEMI Super Stock",
+            
+            # Exclusive Reward
+        ]
+    
+    @functools.cached_property
+    def playlist_british_automotive_cars(self) -> List[str]:
+        return [
+            # Series
+            "2025 Bentley Continental GT Speed",
+            "2019 Aston Martin Valhalla Concept Car",
+            
+            # Summer
+            "2019 Ginetta G40 Junior",
+            "2021 McLaren 620R",
+            
+            # Autumn
+            "2015 Jaguar XKR-S GT",
+            "2021 MINI John Cooper Works GP",
+            
+            # Winter
+            "2006 Vauxhall Astra VXR",
+            "2016 Bentley Bentayga",
+            
+            # Spring
+            "2002 Lotus Esprit V8",
+            "2023 Lotus Emira",
             
             # Exclusive Reward
         ]
@@ -2136,172 +2422,182 @@ class ForzaHorizon6Game(Game):
     @functools.cached_property
     def wheelspin_cars(self) -> List[str]:
         return [
-            "2019 Apollo Intensa Emozione (R Class)",
-            "2019 Aston Martin DBS Superleggera (S1 Class)",
-            "2019 Aston Martin Valhalla Concept Car (R Class)",
-            "1984 Audi Sport quattro (B Class)",
-            "2020 BMW M2 Competition Coupé (A Class)",
-            "2016 Bentley Bentayga (A Class)",
-            "2019 Casey Currie Motorsports #4402 Ultra 4 'Trophy Jeep' (A Class)",
-            "1960 Chevrolet Corvette (C Class)",
-            "2019 Chevrolet Corvette ZR1 (S1 Class)",
-            "1968 Dodge Dart HEMI Super Stock (B Class)",
-            "1970 Dodge Challenger R/T (C Class)",
-            "2016 Dodge Viper ACR (S1 Class)",
-            "1984 Ferrari 288 GTO (A Class)",
-            "1992 Ferrari 512 TR (A Class)",
-            "1994 Ferrari F355 Berlinetta (B Class)",
-            "2012 Ferrari 599XX Evolution (S2 Class)",
-            "2019 Ferrari F8 Tributo (S2 Class)",
-            "1968 Ford Mustang GT 2+2 Fastback Forza Edition (A Class)",
-            "1986 Ford F-150 XLT Lariat Forza Edition (S2 Class)",
-            "2014 Ford Ranger T6 Rally Raid (B Class)",
-            "2017 Ford M-Sport Fiesta RS (S1 Class)",
-            "2020 Ford Super Duty F-450 DRW PLATINUM Forza Edition (A Class)",
-            "2022 Ford F-150 Lightning (C Class)",
-            "2006 Formula Drift #43 Dodge Viper SRT-10 ACR (S1 Class)",
-            "2015 Formula Drift #13 Ford Mustang (S1 Class)",
-            "2012 Hennessey Venom GT (S2 Class)",
-            "1961 Jaguar E-type (C Class)",
-            "2015 Koenigsegg One:1 (S2 Class)",
-            "1999 Lamborghini Diablo GTR (S2 Class)",
-            "2011 Lamborghini Sesto Elemento (S2 Class)",
-            "2012 Lamborghini Aventador LP700-4 (S1 Class)",
-            "2021 McLaren 620R (S1 Class)",
-            "2018 Mercedes-AMG GT 4-Door Coupé (A Class)",
-            "1990 Mercedes-Benz 190 E 2.5-16 Evolution II Forza Edition (A Class)",
-            "1998 Mercedes-Benz AMG CLK GTR (S1 Class)",
-            "2014 Mercedes-Benz G 63 AMG 6x6 (C Class)",
-            "1989 Nissan S-Cargo Forza Edition (S1 Class)",
-            "1993 Nissan 240SX (D Class)",
-            "2012 Nissan GT-R Black Edition (R35) Forza Edition (S2 Class)",
-            "1970 Porsche #3 917 LH Forza Edition (R Class)",
-            "1995 Porsche 911 GT2 (A Class)",
-            "2019 Porsche 911 GT3 RS (S1 Class)",
-            "2021 RJ Anderson #37 Polaris RZR Pro 4 Truck (A Class)",
-            "2021 Rimac Nevera (R Class)",
-            "2013 Wuling Sunshine S Forza Edition (S1 Class)",
+            "2019 Apollo Intensa Emozione",
+            "2019 Aston Martin DBS Superleggera",
+            "2019 Aston Martin Valhalla Concept Car",
+            "1984 Audi Sport quattro",
+            "2020 BMW M2 Competition Coupé",
+            "2016 Bentley Bentayga",
+            "2019 Casey Currie Motorsports #4402 Ultra 4 'Trophy Jeep'",
+            "1960 Chevrolet Corvette",
+            "2019 Chevrolet Corvette ZR1",
+            "1968 Dodge Dart HEMI Super Stock",
+            "1970 Dodge Challenger R/T",
+            "2016 Dodge Viper ACR",
+            "1984 Ferrari 288 GTO",
+            "1992 Ferrari 512 TR",
+            "1994 Ferrari F355 Berlinetta",
+            "2012 Ferrari 599XX Evolution",
+            "2019 Ferrari F8 Tributo",
+            "1968 Ford Mustang GT 2+2 Fastback Forza Edition",
+            "1986 Ford F-150 XLT Lariat Forza Edition",
+            "2014 Ford Ranger T6 Rally Raid",
+            "2017 Ford M-Sport Fiesta RS",
+            "2020 Ford Super Duty F-450 DRW PLATINUM Forza Edition",
+            "2022 Ford F-150 Lightning",
+            "2006 Formula Drift #43 Dodge Viper SRT-10 ACR",
+            "2015 Formula Drift #13 Ford Mustang",
+            "2012 Hennessey Venom GT",
+            "1961 Jaguar E-type",
+            "2015 Koenigsegg One:1",
+            "1999 Lamborghini Diablo GTR",
+            "2011 Lamborghini Sesto Elemento",
+            "2012 Lamborghini Aventador LP700-4",
+            "2021 McLaren 620R",
+            "2018 Mercedes-AMG GT 4-Door Coupé",
+            "1990 Mercedes-Benz 190 E 2.5-16 Evolution II Forza Edition",
+            "1998 Mercedes-Benz AMG CLK GTR",
+            "2014 Mercedes-Benz G 63 AMG 6x6",
+            "1989 Nissan S-Cargo Forza Edition",
+            "1993 Nissan 240SX",
+            "2012 Nissan GT-R Black Edition (R35) Forza Edition",
+            "1970 Porsche #3 917 LH Forza Edition",
+            "1995 Porsche 911 GT2",
+            "2019 Porsche 911 GT3 RS",
+            "2021 RJ Anderson #37 Polaris RZR Pro 4 Truck",
+            "2021 Rimac Nevera",
+            "2013 Wuling Sunshine S Forza Edition",
         ]
         
     @functools.cached_property
     def car_pass_cars(self) -> List[str]:
         return [
-            "2003 Aston Martin DB7 GT (B Class)",
-            "2023 Audi R8 Coupé V10 GT RWD (S1 Class)",
-            "1972 Datsun #269 Attacking the Clock Racing 240Z 'All Carbon Hill Climb Beast' (R Class)",
-            "1972 Honda Z GT (D Class)",
-            "2008 Honda Civic Type R (FD2) (B Class)",
-            "2024 Koenigsegg Gemera (S2 Class)",
-            "1974 Mazda #123 Mad Mike 808 Wagon 'FURSTY' (S1 Class)",
-            "1972 Nissan Patrol (D Class)",
-            "1990 Nissan #12 Skyline GT-R (BNR32 Gr.A) JTC (S2 Class)",
-            "1998 Nissan Skyline GT-R 40th Anniversary (B Class)",
-            "2023 Toyota GR Corolla (B Class)",
-            "2024 Toyota Prius Prime XSE Premium (C Class)",
-            "1968 Alfa Romeo Autodelta Tipo 33/2 Daytona (A Class)",
-            "1957 Ford Thunderbird (D Class)",
-            "1983 Nissan Skyline 2000 Turbo RS (C Class)",
-            "1987 Porsche #203 Porsche AG 961 (S2 Class)",
+            "2003 Aston Martin DB7 GT",
+            "2023 Audi R8 Coupé V10 GT RWD",
+            "1972 Datsun #269 Attacking the Clock Racing 240Z 'All Carbon Hill Climb Beast'",
+            "1972 Honda Z GT",
+            "2008 Honda Civic Type R (FD2)",
+            "2024 Koenigsegg Gemera",
+            "1974 Mazda #123 Mad Mike 808 Wagon 'FURSTY'",
+            "1972 Nissan Patrol",
+            "1990 Nissan #12 Skyline GT-R (BNR32 Gr.A) JTC",
+            "1998 Nissan Skyline GT-R 40th Anniversary",
+            "2023 Toyota GR Corolla",
+            "2024 Toyota Prius Prime XSE Premium",
+            "1968 Alfa Romeo Autodelta Tipo 33/2 Daytona",
+            "1957 Ford Thunderbird",
+            "1983 Nissan Skyline 2000 Turbo RS",
+            "1987 Porsche #203 Porsche AG 961",
+            "2025 McLaren W1",
+            "2023 Dodge Challenger SRT Demon 170",
+            "1998 Renault Sport Spider",
+            "1987 Porsche 911 Carrera Coupe ‘Luftauto 002’ ",
         ]
         
     @functools.cached_property
     def italian_passion_cars(self) -> List[str]:
         return [
-            "2021 Alfa Romeo Giulia GTAm (S1 Class)",
-            "1990 Alfa Romeo SE 048SP (R Class)",
-            "1967 Ferrari 275 GTB4 Spider (C Class)",
-            "2025 Ferrari F80 (R Class)",
+            "2021 Alfa Romeo Giulia GTAm",
+            "1990 Alfa Romeo SE 048SP",
+            "1967 Ferrari 275 GTB4 Spider",
+            "2025 Ferrari F80",
         ]
         
     @functools.cached_property
     def partnership_cars(self) -> List[str]:
         return [
-            "1962 Peel P50 Trolli Edition (D Class)",
-            "1965 Toyota Sports 800 Fanta Edition (D Class)",
+            "1962 Peel P50 Trolli Edition",
+            "1965 Toyota Sports 800 Fanta Edition",
         ]
         
     @functools.cached_property
     def preorder_cars(self) -> List[str]:
         return [
-            "2017 Ferrari J50 Preorder Car (S1 Class)",
+            "2017 Ferrari J50 Preorder Car",
         ]
         
     @functools.cached_property
     def time_attack_cars(self) -> List[str]:
         return [
-            "1990 Honda #19 101 Motorsport CRX WTAC (S2 Class)",
-            "1992 Honda #21 Hardrace/JDMYard Civic WTAC (R Class)",
-            "2001 Honda #33 Integra WTAC (S2 Class)",
-            "2004 Honda #52 Evasive Motorsports S2000 WTAC (S2 Class)",
-            "1990 Mitsubishi #269 Attacking the Clock Racing Minicab Time Attack (D Class)",
-            "1993 Nissan #32 Skyline WTAC 'Xtreme GTR' (R Class)",
-            "2000 Nissan #36 Dream Project S15 Silvia WTAC (R Class)",
-            "1995 Toyota J&J Motorsport Supra WTAC (S2 Class)",
+            "1990 Honda #19 101 Motorsport CRX WTAC",
+            "1992 Honda #21 Hardrace/JDMYard Civic WTAC",
+            "2001 Honda #33 Integra WTAC",
+            "2004 Honda #52 Evasive Motorsports S2000 WTAC",
+            "1990 Mitsubishi #269 Attacking the Clock Racing Minicab Time Attack",
+            "1993 Nissan #32 Skyline WTAC 'Xtreme GTR'",
+            "2000 Nissan #36 Dream Project S15 Silvia WTAC",
+            "1995 Toyota J&J Motorsport Supra WTAC",
         ]
         
     @functools.cached_property
     def vip_cars(self) -> List[str]:
         return [
-            "1999 Dodge Viper GTS ACR Forza Edition (A Class)",
-            "2020 Lotus Evija Forza Edition (S2 Class)",
-            "2019 Toyota Tacoma TRD Pro Forza Edition (R Class)",
+            "1999 Dodge Viper GTS ACR Forza Edition",
+            "2020 Lotus Evija Forza Edition",
+            "2019 Toyota Tacoma TRD Pro Forza Edition",
         ]
         
     @functools.cached_property
     def welcome_cars(self) -> List[str]:
         return [
-            "2021 BMW M4 Competition Coupé Welcome Pack (S1 Class)",
-            "2018 Ferrari FXX-K Evo Welcome Pack (R Class)",
-            "2023 Ford F-150 Raptor R Welcome Pack (B Class)",
-            "2020 Mercedes-AMG GT Black Series Welcome Pack (S2 Class)",
-            "2004 Mitsubishi Lancer Evolution VIII MR Welcome Pack (A Class)",
+            "2021 BMW M4 Competition Coupé Welcome Pack",
+            "2018 Ferrari FXX-K Evo Welcome Pack",
+            "2023 Ford F-150 Raptor R Welcome Pack",
+            "2020 Mercedes-AMG GT Black Series Welcome Pack",
+            "2004 Mitsubishi Lancer Evolution VIII MR Welcome Pack",
         ]
         
     def cars(self) -> List[str]:
-        cars: List[str] = self.base_cars[:]
-        cars.extend(sorted(self.collection_cars))
-        cars.extend(sorted(self.wristband_cars))
-        
-        if self.has_car_set_playlist_history:
-            cars.extend(self.playlist_history_cars)
-        
-        if self.has_car_set_playlist_welcome:
-            cars.extend(self.playlist_welcome_to_japan_cars)
-        
-        if self.has_car_set_playlist_decades:
-            cars.extend(self.playlist_horizon_decades_cars)
-        
-        if self.has_car_set_playlist_exotics:
-            cars.extend(self.playlist_italian_exotics_cars)
-        
-        if self.has_car_set_playlist_mascot:
-            cars.extend(self.playlist_horizon_mascot_party_cars)
-        
-        if self.has_car_set_wheelspin:
-            cars.extend(self.wheelspin_cars)
-        
-        if self.has_car_set_car_pass:
-            cars.extend(self.car_pass_cars)
+        if self.use_car_list:
+            return self.my_car_list
+        else:
+            cars: List[str] = self.base_cars[:]
+            cars.extend(sorted(self.collection_cars))
+            cars.extend(sorted(self.wristband_cars))
             
-        if self.has_car_set_partnership:
-            cars.extend(self.partnership_cars)
-        
-        if self.has_car_set_preorder:
-            cars.extend(self.preorder_cars)
-        
-        if self.has_car_set_welcome_pack:
-            cars.extend(self.welcome_cars)
-        
-        if self.has_car_set_vip:
-            cars.extend(self.vip_cars)
-        
-        if self.has_car_set_time_attack_car_pack:
-            cars.extend(self.time_attack_cars)
-        
-        if self.has_car_set_italian_passion:
-            cars.extend(self.italian_passion_cars)
-        
-        return sorted(cars)
+            if self.has_car_set_playlist_history:
+                cars.extend(self.playlist_history_cars)
+            
+            if self.has_car_set_playlist_welcome:
+                cars.extend(self.playlist_welcome_to_japan_cars)
+            
+            if self.has_car_set_playlist_decades:
+                cars.extend(self.playlist_horizon_decades_cars)
+            
+            if self.has_car_set_playlist_exotics:
+                cars.extend(self.playlist_italian_exotics_cars)
+            
+            if self.has_car_set_playlist_mascot:
+                cars.extend(self.playlist_horizon_mascot_party_cars)
+            
+            if self.has_car_set_playlist_british:
+                cars.extend(self.playlist_british_automotive_cars)
+            
+            if self.has_car_set_wheelspin:
+                cars.extend(self.wheelspin_cars)
+            
+            if self.has_car_set_car_pass:
+                cars.extend(self.car_pass_cars)
+                
+            if self.has_car_set_partnership:
+                cars.extend(self.partnership_cars)
+            
+            if self.has_car_set_preorder:
+                cars.extend(self.preorder_cars)
+            
+            if self.has_car_set_welcome_pack:
+                cars.extend(self.welcome_cars)
+            
+            if self.has_car_set_vip:
+                cars.extend(self.vip_cars)
+            
+            if self.has_car_set_time_attack_car_pack:
+                cars.extend(self.time_attack_cars)
+            
+            if self.has_car_set_italian_passion:
+                cars.extend(self.italian_passion_cars)
+            
+            return sorted(cars)
       
     @functools.cached_property
     def base_time_attack(self) -> List[str]:
@@ -2310,6 +2606,12 @@ class ForzaHorizon6Game(Game):
             "Sekibe Time Attack",
             "Hokubu Time Attack",
             "Soni Time Attack",
+        ]
+    
+    @functools.cached_property
+    def base_drift_attack(self) -> List[str]:
+        return [
+            "Shimanoyama Drift Attack",
         ]
       
     @functools.cached_property
@@ -2397,6 +2699,7 @@ class ForzaHorizon6Game(Game):
             + self.base_house
             + self.base_car_meet
             + self.base_time_attack
+            + self.base_drift_attack
             + self.base_drag_meet
             + self.tracks_including_long()
             + self.stories()
@@ -2411,6 +2714,10 @@ class ForzaHorizon6Game(Game):
     @staticmethod
     def time_attack_lap_range() -> range:
         return range(1, 11)
+    
+    @staticmethod
+    def drift_attack_score_range() -> range:
+        return range(20000, 150000, 5000)
 
     @staticmethod
     def star_amount_job_range() -> range:
@@ -2418,11 +2725,30 @@ class ForzaHorizon6Game(Game):
         
 # Archipelago Options
 class ForzaHorizon6IncludeChallengeType(OptionSet):
-    """Indicates which type of challenge should be included"""
+    """
+    Indicates which type of challenge should be included.
+    
+    - Single Race  : Finish 1 race in a position randomized between 1st and 4th
+    - Triple Race  : Finish 3 races in a position randomized between 1st and 4th
+    - Custom Race  : Finish 1 race with custom rules in a position randomized between 1st and 4th
+    - Rival        : Complete a clean Rival time
+    - PR Stunt     : Complete 3 or 5 PR Stunts
+    - Skill        : Complete 3 or 5 Skills
+    - Car Mastery  : Complete a Mastery Tree
+    - Gift         : Gift a car
+    - Online Round : Play a round of an online gamemode
+    - Cruise       : Drive from a location A to a location B
+    - Job          : Complete a full job shift
+    - Story        : Complete a story
+    - Time Attack  : Complete laps in Time Attack
+    - Drift Attack : Complete a lap with randomized score in Drift Attack
+    - EventLab     : Complete an EventLab event
+    """
     display_name = "Forza Horizon 6 Challenge Type"
     valid_keys = {
         "Single Race",
-        "Championship Race",
+        "Triple Race",
+        "Custom Race",
         "Rival",
         "PR Stunt",
         "Skill",
@@ -2433,6 +2759,7 @@ class ForzaHorizon6IncludeChallengeType(OptionSet):
         "Job",
         "Story",
         "Time Attack",
+        "Drift Attack",
         "EventLab"
     }
 
@@ -2459,6 +2786,7 @@ class ForzaHorizon6IncludeCarSet(OptionSet):
         "Playlist Horizon Decades",
         "Playlist Italian Exotics",
         "Playlist Horizon Mascot Party",
+        "Playlist British Automotive",
         "Wheelspin",
         "Car Pass DLC",
         "Partnership DLC",
@@ -2470,3 +2798,17 @@ class ForzaHorizon6IncludeCarSet(OptionSet):
     }
 
     default = valid_keys
+
+class ForzaHorizon6IncludeMyCarList(Toggle):
+    """Indicates whether to use your car list for car conditions"""
+    display_name = "Forza Horizon 6 Include My Car List"
+
+class ForzaHorizon6MyCarList(OptionSet):
+    """
+    Car list to use.
+    
+    Only relevant if "Forza Horizon 6 Include My Car List" is selected
+    """
+    display_name = "Forza Horizon 6 My Car List"
+    default = []
+
