@@ -259,7 +259,7 @@ class ForzaHorizon6Game(Game):
                 Empty = False
                 templates.extend([
                     GameObjectiveTemplate(
-                        label="Finish PLACEMENT on TRACK (OPP opponents, LAP laps, WHEATHER weather, TIME, TRAFFIC) with a car from the following brand: BRAND",
+                        label="Finish PLACEMENT on TRACK (OPP opponents, LAP laps, WEATHER weather, TIME, TRAFFIC) with a car from the following brand: BRAND",
                         data={
                             "PLACEMENT": (self.race_placements, 1),
                             "TRACK": (self.tracks_including_long, 1),
@@ -280,7 +280,7 @@ class ForzaHorizon6Game(Game):
                 Empty = False
                 templates.extend([
                     GameObjectiveTemplate(
-                        label="Finish PLACEMENT on TRACK (OPP opponents, LAP laps, WHEATHER weather, TIME, TRAFFIC) with a car from the following class: CLASS",
+                        label="Finish PLACEMENT on TRACK (OPP opponents, LAP laps, WEATHER weather, TIME, TRAFFIC) with a car from the following class: CLASS",
                         data={
                             "PLACEMENT": (self.race_placements, 1),
                             "TRACK": (self.tracks_including_long, 1),
@@ -301,7 +301,7 @@ class ForzaHorizon6Game(Game):
                 Empty = False
                 templates.extend([
                     GameObjectiveTemplate(
-                        label="Finish PLACEMENT on TRACK (OPP opponents, LAP laps, WHEATHER weather, TIME, TRAFFIC) with a car from the following type: TYPE",
+                        label="Finish PLACEMENT on TRACK (OPP opponents, LAP laps, WEATHER weather, TIME, TRAFFIC) with a car from the following type: TYPE",
                         data={
                             "PLACEMENT": (self.race_placements, 1),
                             "TRACK": (self.tracks_including_long, 1),
@@ -322,7 +322,7 @@ class ForzaHorizon6Game(Game):
                 Empty = False
                 templates.extend([
                     GameObjectiveTemplate(
-                        label="Finish PLACEMENT on TRACK (OPP opponents, LAP laps, WHEATHER weather, TIME, TRAFFIC) with a car from the following car: CAR",
+                        label="Finish PLACEMENT on TRACK (OPP opponents, LAP laps, WEATHER weather, TIME, TRAFFIC) with a car from the following car: CAR",
                         data={
                             "PLACEMENT": (self.race_placements, 1),
                             "TRACK": (self.tracks_including_long, 1),
@@ -342,7 +342,7 @@ class ForzaHorizon6Game(Game):
             if Empty:
                 templates.extend([
                     GameObjectiveTemplate(
-                        label="Finish PLACEMENT on TRACK (OPP opponents, LAP laps, WHEATHER weather, TIME, TRAFFIC)",
+                        label="Finish PLACEMENT on TRACK (OPP opponents, LAP laps, WEATHER weather, TIME, TRAFFIC)",
                         data={
                             "PLACEMENT": (self.race_placements, 1),
                             "TRACK": (self.tracks_including_long, 1),
